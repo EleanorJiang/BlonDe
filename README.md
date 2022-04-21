@@ -4,7 +4,7 @@
 
 **If you use this package in your research, please cite:**
 ```
-Accepted to NACCL 2022
+Accepted to NAACL2022
 ```
 
 
