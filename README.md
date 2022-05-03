@@ -95,4 +95,4 @@ See example.py
     import nltk
     nltk.download()
   ```
-  A new window should open, showing the NLTK Downloader. Choose 'wordnet'.
+  A new window should be open, showing the NLTK Downloader. Choose 'wordnet'.
