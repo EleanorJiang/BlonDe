@@ -34,8 +34,8 @@ def load_corpus(data_dir: str, set: str='test') -> Tuple[Dict[str, Dataset], Dat
             ref_path = os.path.join(book_dir, "{}.ref_re.txt".format(i))
             ms_path = os.path.join(book_dir, "{}.mt_re.txt".format(i))
             sent_path = os.path.join(book_dir, "{}.sent_re.txt".format(i))
-            doc_path = os.path.join(book_dir, "{}.ctx_re.txt".format(i))
-            cad_path = os.path.join(book_dir, "{}.ctx_re.txt".format(i))
+            doc_path = os.path.join(data_dir, "Naive", book, "{}.chs_re.txt".format(i))
+            cad_path = os.path.join(data_dir, "CAD", book, "{}.chs_re.txt".format(i))
             ctx_path = os.path.join(book_dir, "{}.ctx_re.txt".format(i))
             pe_path = os.path.join(book_dir, "{}.pe.txt".format(i))
             # The following system outputs are in separate folders
