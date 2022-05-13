@@ -1,4 +1,4 @@
-# BlonD Scores Package
+# BlonDe Scores Package
 
 - Link to paper: [here](https://openreview.net/forum?id=Bl-gR45hkZc).
 - Link to the BWB dataset: [here](https://drive.google.com/drive/folders/12K1-DWmpEdqkaR_61aogdywsALDg4z1L?usp=sharing)
