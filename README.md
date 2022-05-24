@@ -6,8 +6,8 @@
 
 [BWB: Bilingual Web Book Dataset](https://drive.google.com/drive/folders/12K1-DWmpEdqkaR_61aogdywsALDg4z1L?usp=sharing)
 
-
-- May 2022: Release the BlonDe package and the BWB dataset.
+- May 2022: Released the BWB dataset.
+- May 2022: Released the BlonDe package.
 - May 2022: Accepted to NAACL2022
 
 
