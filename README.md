@@ -11,7 +11,7 @@
 - May 2022: Accepted to NAACL2022
 
 
-**If you use the BlonDe package or the BWB dataset in your research, please cite:**
+**If you use the BlonDe package or the BWB dataset in your research, pleasea cite:**
 ```
 @article{jiang-etal-2022-blonde,
       title={{BlonDe}: An Automatic Evaluation Metric for Document-level Machine Translation}, 
@@ -60,7 +60,7 @@ where ``sys_corpus``, ``ref_corpus_1`` and ``ref_corpus_2`` are ``List[List[str]
 
 #### For multiple systems & statistical testing:
  ```
-        blond_plus = BLOND(references=[ref_corpus]) # for faster recomputation
+        blond = BLOND(references=[ref_corpus]) # for faster recomputation
         score = blond.corpus_score(sys_corpus)
    ```
 
