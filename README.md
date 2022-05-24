@@ -14,7 +14,7 @@
 **If you use the BlonDe package or the BWB dataset in your research, please cite:**
 ```
 @article{jiang-etal-2022-blonde,
-      title={{BLONDE}: An Automatic Evaluation Metric for Document-level Machine Translation}, 
+      title={{BlonDe}: An Automatic Evaluation Metric for Document-level Machine Translation}, 
       author={Yuchen Eleanor Jiang, Tianyu Liu, Shuming Ma, Dongdong Zhang, Jian Yang, Haoyang Huang, Rico Sennrich, Ryan Cotterell, Mrinmaya Sachan, Ming Zhou},
       year={2022},
       eprint={2103.11878},
