@@ -34,7 +34,8 @@ In the BlonDe package, there are:
 - ``BlonDe``: the main metric, combining ``dBlonDe`` with sentence-level measurement
 - ``dBlonDe``: measure the discourse phonomena (``entity``, ``tense``, ``pronoun``, ``discourse markers``)
 - ``BlonDe+``: take human annotation (annotated ambiguous/ommited phrases and manually-annotated NER) into consideration
-- ``Cohesion Score``: measure document-level fluency without reference (beta)
+
+[comment]: <> (- ``Cohesion Score``: measure document-level fluency without reference &#40;beta&#41;)
 
 ### Usage
 
@@ -93,35 +94,51 @@ where ``sys_corpus``, ``ref_corpus_1`` and ``ref_corpus_2`` are ``List[List[str]
         score = blond_plus.corpus_score(sys_corpus, [ref_corpus_1, ref_corpus_2, ...])
    ```
 
-#### Cohesion Score (beta):
- ```
-    cohesion_score = cohesion(sys_doc,word_frequency_file, weight_for_oov=300000, exclu_stop=True, norm=True)
-   ```
-    'word_frequency_file' is a 'json' file containing word frequency table.
-    'weight_for_oov' is the unormalized weight for out of vocabulary.
-    'exclu_stop' is 'True' when the stop words is excluded.
-    'norm' is 'True' when normalization is conducted.
+[comment]: <> (#### Cohesion Score &#40;beta&#41;:)
+
+[comment]: <> ( ```)
+
+[comment]: <> (    cohesion_score = cohesion&#40;sys_doc,word_frequency_file, weight_for_oov=300000, exclu_stop=True, norm=True&#41;)
+
+[comment]: <> ( ```)
+
+[comment]: <> (- ``word_frequency_file``: a ``json`` file containing word frequency table.)
+
+[comment]: <> (- ``weight_for_oov``: the unormalized weight for out of vocabulary.)
+
+[comment]: <> (- ``exclu_stop``: ``True`` when the stop words is excluded.)
+
+[comment]: <> (- ``norm``: ``True`` when normalization is conducted.)
 
 
 ### Requirements
-- ``spacy``
 
-     ```
-      pip install spacy
-      python -m spacy download en_core_web_sm
-     ```
+[comment]: <> (- ``spacy``)
+
+```
+  pip install spacy
+  python -m spacy download en_core_web_sm
+ ```
   
-- ``nltk.stopwords``, ``nltk.wordnet``: for cohesion score (beta)
+[comment]: <> (- ``nltk.stopwords``, ``nltk.wordnet``: for cohesion score &#40;beta&#41;)
 
-  ```
-    pip install nltk
-  ```
-  then run the Python interpreter:
-  ```
-    import nltk
-    nltk.download()
-  ```
-  In the NLTK Downloader window, choose ``wordnet``.
+[comment]: <> (  ```)
+
+[comment]: <> (    pip install nltk)
+
+[comment]: <> (  ```)
+
+[comment]: <> (  then run the Python interpreter:)
+
+[comment]: <> (  ```)
+
+[comment]: <> (    import nltk)
+
+[comment]: <> (    nltk.download&#40;&#41;)
+
+[comment]: <> (  ```)
+
+[comment]: <> (  In the NLTK Downloader window, choose ``wordnet``.)
 
 ## The BWB dataset:
 The BWB dataset is a large-scale document-level Chinese--English parallel dataset.
