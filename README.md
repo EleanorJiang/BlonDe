@@ -1,4 +1,4 @@
-# [BlonDe](https://arxiv.org/abs/2103.11878)
+# [BlonDe and BWB](https://arxiv.org/abs/2103.11878)
 
 
 [BlonDe: An Automatic Evaluation Metric for Document-level Machine Translation](https://arxiv.org/abs/2103.11878)
@@ -38,24 +38,25 @@ In the BlonDe package, there are:
 
 ### Usage
 
-See ``example.py``
+Following [SacreBLEU](https://github.com/mjpost/sacrebleu), we also recommend users to use the object-oriented API, by creating an instance of the ``metrics.BLOND`` class.
+A detailed example is provided in ``example.py``.
 
-#### Load Package
- ```
-        from blond.BlonD import BLOND
-   ```
-#### For a single document:
+#### Loading Package and creating an ``blond`` object:
  ```
         from blond.BlonD import BLOND
         blond = BLOND()
+   ```
+#### For a single document:
+ ```
         score = blond.corpus_score([sys_doc], [[ref_doc_1], [ref_doc_2], ...])
    ```
-          'sys_doc', 'ref_doc': List[str]
+where  ``sys_doc``, ``ref_doc_1`` and ``ref_doc_2`` are  ``List[str]``.
+
 #### For a corpus:
  ```
         score = blond.corpus_score(sys_corpus, [ref_corpus_1, ref_corpus_2, ...])
    ```
-          'sys_corpus', 'ref_corpus': List[List[str]]
+where ``sys_corpus``, ``ref_corpus_1`` and ``ref_corpus_2`` are ``List[List[str]]``.
 
 #### For multiple systems & statistical testing:
  ```
@@ -92,7 +93,7 @@ See ``example.py``
         score = blond_plus.corpus_score(sys_corpus, [ref_corpus_1, ref_corpus_2, ...])
    ```
 
-#### Cohesion Score:
+#### Cohesion Score (beta):
  ```
     cohesion_score = cohesion(sys_doc,word_frequency_file, weight_for_oov=300000, exclu_stop=True, norm=True)
    ```
@@ -103,23 +104,24 @@ See ``example.py``
 
 
 ### Requirements
-- ``spacy``: for BlonD
+- ``spacy``
 
      ```
       pip install spacy
       python -m spacy download en_core_web_sm
-       ```
-- ``nltk.stopwords``, ``nltk.wordnet``: for cohesion score
+     ```
+  
+- ``nltk.stopwords``, ``nltk.wordnet``: for cohesion score (beta)
 
   ```
     pip install nltk
   ```
-  then run the Python interpreter and type the commands:
+  then run the Python interpreter:
   ```
     import nltk
     nltk.download()
   ```
-  Then the NLTK Downloader window should be open. Choose ``wordnet'``.
+  In the NLTK Downloader window, choose ``wordnet``.
 
 ## The BWB dataset:
 The BWB dataset is a large-scale document-level Chinese--English parallel dataset.
