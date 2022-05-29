@@ -15,7 +15,7 @@
 ```
 @article{jiang-etal-2022-blonde,
       title={{BlonDe}: An Automatic Evaluation Metric for Document-level Machine Translation}, 
-      author={Yuchen Eleanor Jiang, Tianyu Liu, Shuming Ma, Dongdong Zhang, Jian Yang, Haoyang Huang, Rico Sennrich, Ryan Cotterell, Mrinmaya Sachan, Ming Zhou},
+      author={Yuchen Eleanor Jiang and Tianyu Liu and Shuming Ma and Dongdong Zhang and Jian Yang and Haoyang Huang and Rico Sennrich and Ryan Cotterell and Mrinmaya Sachan and Ming Zhou},
       year={2022},
       eprint={2103.11878},
       archivePrefix={arXiv},
