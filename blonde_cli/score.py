@@ -118,7 +118,7 @@ def main():
         plus_weights = args.plus_weights
         if os.path.isfile(args.annotation):
             with open(args.annotation) as f:
-                annotation = [line.strip() for line in f]
+                annotation = [[line.strip() for line in f]]
 
     blond = BLONDE(weights=weights,
                  weight_normalize=args.reweight,
@@ -130,9 +130,9 @@ def main():
                  smooth_method=args.smooth_method,
                  smooth_value=args.smooth_value,
                  references=refs,
-                 annotation=[annotation],
+                 annotation=annotation,
                  ner_refined=args.ner_refined)
-    score = blond.corpus_score([sys], annotation=[annotation])
+    score = blond.corpus_score([sys], annotation=annotation)
     print(score)
 
 if __name__ == "__main__":
