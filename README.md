@@ -292,7 +292,7 @@ BLONDE(weights: Weight=WEIGHTS_DEFAULTS,
 ## The BWB dataset:
 
 ### Dataset Overview
-<img align="right" width="300" src="image/blonde_motivation.png">
+<img align="right" width="200" src="image/blonde_motivation.png">
 The BWB dataset is a large-scale document-level Chinese--English parallel dataset.
 It consists of Chinese online novels across multiple genres (sci-fi, romance, action, fantasy, comedy, etc.) 
 and their corresponding English translations crawled from the Internet.
