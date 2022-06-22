@@ -20,7 +20,7 @@ We hope that they will serve as a guide and inspiration for more work in the are
 
 
 - 📙 [BWB: Bilingual Web Book Dataset](#the-bwb-dataset)
-  - A Large-Scale Bilingual Parallel Corpus for Document-Level Machine Translation
+  - A Large-Scale Bilingual Parallel Corpus for Document-Level Machine Translation.
   - [Dataset Overview](#dataset-overview)
   - [Annotation Format](#annotation-format)
   - [Download](#download)
@@ -46,7 +46,7 @@ Please see [release logs](https://github.com/EleanorJiang/CHANGELOG.md) for olde
 ```
 
 
-## The BlonDe package:
+## 📐 The BlonDe package:
 
 ### Package Overview
 
@@ -289,7 +289,7 @@ BLONDE(weights: Weight=WEIGHTS_DEFAULTS,
 
 [comment]: <> (  In the NLTK Downloader window, choose ``wordnet``.)
 
-## The BWB dataset:
+## 📙 The BWB dataset:
 
 ### Dataset Overview
 ![<img align="right" width="400">](image/bwb_dataset_stats.jpg)
