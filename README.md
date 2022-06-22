@@ -15,7 +15,7 @@ We hope that they will serve as a guide and inspiration for more work in the are
 - 📐 [BlonDe](#the-blonde-package)
     - An Automatic Evaluation Metric for Document-Level Machine Translation.
     - [Package Overview](#package-overview)
-    - [Installation](#⏳-installation)
+    - [Installation](#-installation)
     - [Usage](#usage)
 
 
