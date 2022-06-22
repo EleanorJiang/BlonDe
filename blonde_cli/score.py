@@ -138,7 +138,7 @@ def main():
                  smooth_value=args.smooth_value,
                  references=refs,
                  annotation=annotation,
-                 ner_refined=args.ner_refined)
+                 ner_refined=ner_refined)
     score = blond.corpus_score([sys], annotation=annotation)
     print(score)
 
