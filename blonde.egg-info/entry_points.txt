@@ -1,0 +1,2 @@
+[console_scripts]
+blonde = blonde_cli.score:main

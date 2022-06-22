@@ -1,0 +1,6 @@
+spacy
+pandas>=1.0.1
+numpy
+requests
+tqdm>=4.31.1
+packaging>=20.9
