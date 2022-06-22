@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from io import open
 import argparse, os
 from blonde import BLONDE, CATEGORIES
 from blonde import __version__ as VERSION
@@ -84,18 +85,18 @@ def main():
     args = parse_args()
 
     if os.path.isfile(args.system):
-        with open(args.system) as f:
+        with open(args.system, 'r') as f:
             sys = [line.strip() for line in f]
 
         refs = []
         for ref_file in args.reference:
             assert os.path.exists(ref_file), f"reference file {ref_file} doesn't exist"
-            with open(ref_file) as f:
+            with open(ref_file, 'r') as f:
                 curr_ref = [line.strip() for line in f]
                 assert len(curr_ref) == len(sys), f"# of sentences in {ref_file} doesn't match the # of candidates"
                 refs.append([curr_ref])
         refs = list(zip(*refs))
-    elif os.path.isfile(args.ref[0]):
+    elif os.path.isfile(args.reference[0]):
         assert os.path.exists(args.cand), f"system file {args.cand} doesn't exist"
 
     categories = {}
@@ -112,13 +113,20 @@ def main():
             "n-gram": (0.25, 0.25, 0.25, 0.25)
             }
 
-    plus_categories, plus_weights, annotation = None, None, None
+    plus_categories, plus_weights, annotation, ner_refined = None, None, None, None
     if args.plus:
         plus_categories = args.plus_categories
         plus_weights = args.plus_weights
         if os.path.isfile(args.annotation):
-            with open(args.annotation) as f:
-                annotation = [line.strip() for line in f]
+            with open(args.annotation, 'r') as f:
+                annotation = [[line.strip() for line in f]]
+    if args.ner_refined:
+        if os.path.isfile(args.ner_refined):
+            with open(args.annotation, 'r') as f:
+                ner_refined = [[line.strip() for line in f]]
+        else:
+            assert os.path.exists(args.ner_refined), f"ner file {args.ner_refined} doesn't exist"
+
 
     blond = BLONDE(weights=weights,
                  weight_normalize=args.reweight,
@@ -130,9 +138,9 @@ def main():
                  smooth_method=args.smooth_method,
                  smooth_value=args.smooth_value,
                  references=refs,
-                 annotation=[annotation],
-                 ner_refined=args.ner_refined)
-    score = blond.corpus_score([sys], annotation=[annotation])
+                 annotation=annotation,
+                 ner_refined=ner_refined)
+    score = blond.corpus_score([sys], annotation=annotation)
     print(score)
 
 if __name__ == "__main__":

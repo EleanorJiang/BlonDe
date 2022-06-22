@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from io import open
 import argparse, os
 from blonde import BLONDE, CATEGORIES
 from blonde import __version__ as VERSION
@@ -84,19 +85,19 @@ def main():
     args = parse_args()
 
     if os.path.isfile(args.system):
-        with open(args.system) as f:
+        with open(args.system, encoding="utf-8") as f:
             sys = [line.strip() for line in f]
 
         refs = []
         for ref_file in args.reference:
             assert os.path.exists(ref_file), f"reference file {ref_file} doesn't exist"
-            with open(ref_file) as f:
+            with open(ref_file, encoding="utf-8") as f:
                 curr_ref = [line.strip() for line in f]
                 assert len(curr_ref) == len(sys), f"# of sentences in {ref_file} doesn't match the # of candidates"
                 refs.append([curr_ref])
         refs = list(zip(*refs))
     elif os.path.isfile(args.reference[0]):
-        assert os.path.exists(args.cand), f"system file {args.cand} doesn't exist"
+        assert os.path.exists(args.system), f"system file {args.cand} doesn't exist"
 
     categories = {}
     for category in args.categories:
@@ -117,11 +118,11 @@ def main():
         plus_categories = args.plus_categories
         plus_weights = args.plus_weights
         if os.path.isfile(args.annotation):
-            with open(args.annotation) as f:
+            with open(args.annotation, encoding="utf-8") as f:
                 annotation = [[line.strip() for line in f]]
     if args.ner_refined:
         if os.path.isfile(args.ner_refined):
-            with open(args.annotation) as f:
+            with open(args.ner_refined, encoding="utf-8") as f:
                 ner_refined = [[line.strip() for line in f]]
         else:
             assert os.path.exists(args.ner_refined), f"ner file {args.ner_refined} doesn't exist"

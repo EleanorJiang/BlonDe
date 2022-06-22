@@ -220,9 +220,9 @@ def refine_NER(doc: ProcessedDoc, lines_ner):
     """
     if len(lines_ner) != len(doc):
         logging.warning(f"length of the ner is not equal to reference document! ")
-    for j, line_an in enumerate(lines_ner):
+    for j, line in enumerate(lines_ner):
         new_count_ent = [Counter(), Counter()]
-        entity_types = line_an.split("\t")
+        entity_types = line.split("\t")
         for i, entity_type in enumerate(entity_types):
             entity_type = entity_type.split("(")[1]
             entities = entity_type.split(";")[:-1]
