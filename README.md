@@ -12,14 +12,14 @@ We hope that they will serve as a guide and inspiration for more work in the are
 
 
 ## Quick Links
-- 📐 [BlonDe](#the-blonde-package)
+- 📐 [BlonDe](#-the-blonde-package)
     - An Automatic Evaluation Metric for Document-Level Machine Translation.
     - [Package Overview](#package-overview)
     - [Installation](#-installation)
     - [Usage](#usage)
 
 
-- 📙 [BWB: Bilingual Web Book Dataset](#the-bwb-dataset)
+- 📙 [BWB: Bilingual Web Book Dataset](#-the-bwb-dataset)
   - A Large-Scale Bilingual Parallel Corpus for Document-Level Machine Translation.
   - [Dataset Overview](#dataset-overview)
   - [Annotation Format](#annotation-format)
@@ -46,7 +46,7 @@ Please see [release logs](https://github.com/EleanorJiang/CHANGELOG.md) for olde
 ```
 
 
-## 📐 The BlonDe package:
+## 📐 The BlonDe Package:
 
 ### Package Overview
 
@@ -289,7 +289,7 @@ BLONDE(weights: Weight=WEIGHTS_DEFAULTS,
 
 [comment]: <> (  In the NLTK Downloader window, choose ``wordnet``.)
 
-## 📙 The BWB dataset:
+## 📙 The BWB Dataset:
 
 ### Dataset Overview
 ![<img align="right" width="400">](image/bwb_dataset_stats.jpg)
