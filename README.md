@@ -1,18 +1,40 @@
 # [BlonDe and BWB](https://arxiv.org/abs/2103.11878)
+[![Python version](https://img.shields.io/pypi/pyversions/blonde)](https://img.shields.io/pypi/pyversions/blonde)
+[![arxiv](https://img.shields.io/badge/arXiv-2103.11878-b31b1b)](https://arxiv.org/abs/2103.11878)
+[![PyPI version](https://img.shields.io/pypi/v/blonde)](https://img.shields.io/pypi/v/blonde)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 
+
+BlonDe and BWB are developed for document-level machine translation.
+BlonDe is an automatic evaluation metric that explicitly tracks discourse phenomena.
+BWB is a large-scale bilingual parallel corpus that consists of web novels.
+
+We hope that they will serve as a guide and inspiration for more work in the area of document level machine translation.
 
 
-[BlonDe: An Automatic Evaluation Metric for Document-level Machine Translation](https://arxiv.org/abs/2103.11878)
+## Quick Links
+- 📐 [BlonDe](#the-blonde-package)
+    - An Automatic Evaluation Metric for Document-Level Machine Translation.
+    - [Package Overview](#package-overview)
+    - [Installation](#⏳-installation)
+    - [Usage](#usage)
 
 
-[BWB: Bilingual Web Book Dataset](https://drive.google.com/drive/folders/12K1-DWmpEdqkaR_61aogdywsALDg4z1L?usp=sharing)
-
-- May 2022: Released the BWB dataset.
+- 📙 [BWB: Bilingual Web Book Dataset](#the-bwb-dataset)
+  - A Large-Scale Bilingual Parallel Corpus for Document-Level Machine Translation
+  - [Dataset Overview](#dataset-overview)
+  - [Annotation Format](#annotation-format)
+  - [Download](#download)
+  
+#### News:
+<!-- - Features to appear in the next version (currently in the master branch): -->
+- June 2022: Released the BWB dataset.
 - May 2022: Released the BlonDe package.
-- May 2022: Accepted to NAACL2022
+- May 2022: Accepted to NAACL2022 🎉
 
+Please see [release logs](https://github.com/EleanorJiang/CHANGELOG.md) for older updates.
 
-**If you use the BlonDe package or the BWB dataset in your research, pleasea cite:**
-```
+**If you use the BlonDe package or the BWB dataset for your research, please cite:**
+```bibtex
 @article{jiang-etal-2022-blonde,
       title={{BlonDe}: An Automatic Evaluation Metric for Document-level Machine Translation}, 
       author={Yuchen Eleanor Jiang and Tianyu Liu and Shuming Ma and Dongdong Zhang and Jian Yang and Haoyang Huang and Rico Sennrich and Ryan Cotterell and Mrinmaya Sachan and Ming Zhou},
@@ -26,58 +48,101 @@
 
 ## The BlonDe package:
 
+### Package Overview
+
+![<img align="right" width="300">](image/blonde_motivation.png)
+
 Standard automatic metrics, e.g. BLEU, are not reliable for document-level MT evaluation. They can neither distinguish document-level improvements in translation quality from sentence-level ones, nor identify the discourse phenomena that cause context-agnostic translations.
 
 BlonDe is proposed to widen the scope of automatic MT evaluation from sentence to the document level. It takes discourse coherence into consideration by categorizing discourse-related spans and calculating the similarity-based F1 measure of categorized spans. 
 
+As shown in the figure, BlonDe is a lot more selective than BLEU for document-level MT 
+and shows a larger quality difference between human and machine translations.
+
 In the BlonDe package, there are:
 - ``BlonDe``: the main metric, combining ``dBlonDe`` with sentence-level measurement
-- ``dBlonDe``: measure the discourse phonomena (``entity``, ``tense``, ``pronoun``, ``discourse markers``)
-- ``BlonDe+``: take human annotation (annotated ambiguous/ommited phrases and manually-annotated NER) into consideration
+- ``dBlonDe``: measures the discourse phonomena (``entity``, ``tense``, ``pronoun``, ``discourse markers``)
+- ``BlonDe+``: takes human annotation (annotated ambiguous/ommitted phrases and manually-annotated NER) into consideration
 
-[comment]: <> (- ``Cohesion Score``: measure document-level fluency without reference &#40;beta&#41;)
+
+### ⏳ Installation
+**Python>=3.6 only**
+
+Before you install ``blonde``, make sure that
+your `pip`, `setuptools`，`wheel` and `spacy` are up to date, and ``en_core_web_sm`` is downloaded.
+```sh
+pip install -U pip setuptools wheel
+pip install -U spacy
+python -m spacy download en_core_web_sm
+```
+
+Install the official Python module from PyPI:
+```sh
+pip install blonde
+```
+Install the latest unstable version from the master branch on Github:
+```
+pip install git+https://github.com/EleanorJiang/BlonDe
+```
+
+Install from the source:
+```sh
+git clone https://github.com/EleanorJiang/BlonDe
+cd BlonDe
+pip install .
+```
+and you may test your installation by:
+```
+python -m unittest discover
+```
 
 ### Usage
+### Command-line Usage
+```sh
+blonde -r example/ref.txt -s sys.txt
+```
 
-Following [SacreBLEU](https://github.com/mjpost/sacrebleu), we also recommend users to use the object-oriented API, by creating an instance of the ``metrics.BLOND`` class.
+
+### Using BlonDe from Python
+Following [SacreBLEU](https://github.com/mjpost/sacrebleu), we also recommend users to use the object-oriented API, by creating an instance of the ``BLONDE`` class.
 A detailed example is provided in ``example.py``.
 
-#### Loading Package and creating an ``blond`` object:
+#### Loading Package and creating an ``BLONDE`` object:
  ```
-        from blond.BlonD import BLOND
-        blond = BLOND()
+        from blonde import BLONDE
+        blonde = BLONDE()
    ```
 #### For a single document:
  ```
-        score = blond.corpus_score([sys_doc], [[ref_doc_1], [ref_doc_2], ...])
+        score = blonde.corpus_score([sys_doc], [[ref_doc_1], [ref_doc_2], ...])
    ```
 where  ``sys_doc``, ``ref_doc_1`` and ``ref_doc_2`` are  ``List[str]``.
 
 #### For a corpus:
  ```
-        score = blond.corpus_score(sys_corpus, [ref_corpus_1, ref_corpus_2, ...])
+        score = blonde.corpus_score(sys_corpus, [ref_corpus_1, ref_corpus_2, ...])
    ```
 where ``sys_corpus``, ``ref_corpus_1`` and ``ref_corpus_2`` are ``List[List[str]]``.
 
 #### For multiple systems & statistical testing:
  ```
-        blond = BLOND(references=[ref_corpus]) # for faster recomputation
-        score = blond.corpus_score(sys_corpus)
+        blonde = BLONDE(references=[ref_corpus]) # for faster recomputation
+        score = blonde.corpus_score(sys_corpus)
    ```
 
 #### BlonD+:
  ```
-        blond_plus = BLOND(average_method='geometric',
+        blonde_plus = BLONDE(average_method='geometric',
                            references=[ref_corpus],
                            annotation=an_corpus,
                            ner_refined=ner_corpus
                            )
-        score = blond_plus.corpus_score(sys_corpus)
+        score = blonde_plus.corpus_score(sys_corpus)
    ```
 
 #### Adjust parameters:
  ```
-        blond_plus = BLOND(weights: Dict[str, Union[Tuple[float], float]]=None,
+        blonde_plus = BLONDE(weights: Dict[str, Union[Tuple[float], float]]=None,
                           weight_normalize: bool = False,
                           average_method: str = 'geometric',
                           categories: dict = CATEGORIES,
@@ -91,7 +156,7 @@ where ``sys_corpus``, ``ref_corpus_1`` and ``ref_corpus_2`` are ``List[List[str]
                           annotation: Sequence[Sequence[str]] = None,
                           ner_refined: Sequence[Sequence[str]] = None)
                            )
-        score = blond_plus.corpus_score(sys_corpus, [ref_corpus_1, ref_corpus_2, ...])
+        score = blonde_plus.corpus_score(sys_corpus, [ref_corpus_1, ref_corpus_2, ...])
    ```
 
 [comment]: <> (#### Cohesion Score &#40;beta&#41;:)
@@ -111,15 +176,7 @@ where ``sys_corpus``, ``ref_corpus_1`` and ``ref_corpus_2`` are ``List[List[str]
 [comment]: <> (- ``norm``: ``True`` when normalization is conducted.)
 
 
-### Requirements
 
-[comment]: <> (- ``spacy``)
-
-```
-  pip install spacy
-  python -m spacy download en_core_web_sm
- ```
-  
 [comment]: <> (- ``nltk.stopwords``, ``nltk.wordnet``: for cohesion score &#40;beta&#41;)
 
 [comment]: <> (  ```)
