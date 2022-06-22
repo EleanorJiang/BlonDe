@@ -44,7 +44,7 @@ DM_MAP = {
 }
 # DM_TYPE = list(DM_MAP.keys())
 
-
+# ('tense', 'pronoun', 'entity', 'dm', 'n-gram')
 CATEGORIES = {
     "tense": VB_TYPE,
     "pronoun": PRONOUN_TYPE,
@@ -60,3 +60,5 @@ WEIGHTS = {
         "dm": (0.2, 0.2, 0.2, 0.2, 0.2),
         "n-gram": (0.25, 0.25, 0.25, 0.25)
 }
+
+from .BlonDe import BLONDE, BLONDEScore, BLONDESignature

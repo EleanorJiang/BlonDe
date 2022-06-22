@@ -1,4 +1,4 @@
-import logging, spacy
+import logging, spacy, re
 from . import CATEGORIES, VB_TYPE, PRONOUN_TYPE, PRONOUN_MAP, DM_TYPE, DM_MAP
 from .utils import ProcessedSent, ProcessedDoc, ProcessedCorpus
 from collections import Counter
@@ -48,6 +48,18 @@ def count_dm(sent_tok: Sequence[str]) -> Counter:
             tmp_count = _count_sublist(lower_tok, dm_span)
             count_dm[type] += tmp_count
     return count_dm
+
+
+def count_plus(sent_text: str, checkpoints: Sequence[str]) -> Counter:
+    """
+    checkpoints is the list of annotated spans of a certain category, e.g. Ambiguity or Ellipsis
+    """
+    count_c = Counter() # c denotes BlonDe plus category
+    for span in checkpoints:
+        pattern = re.compile(r"\b{}\b".format(span), re.IGNORECASE)
+        lst = re.findall(pattern, sent_text)
+        count_c[span] = len(lst)
+    return count_c
 
 
 def post_process_ent(ent: Tuple[str, str, int, int]) -> Tuple[str, str, int, int]:
@@ -101,7 +113,7 @@ def process_corpus(corpus: Sequence[Sequence[str]], categories: Dict[str, Sequen
     processed_corpus = []
     processed_doc = []
     i = 0
-    for doc in nlp.pipe(flat_doc_list, disable=["parser"]):
+    for k, doc in enumerate(nlp.pipe(flat_doc_list, disable=["parser"])):
         sent_tok = [w.text for w in doc]
         sent_tag = [w.tag_ for w in doc]
         sent_ent = [post_process_ent(ent) for ent in doc.ents]
@@ -146,7 +158,7 @@ def _flatten_list(doc_list: Sequence[Sequence[str]]) -> Tuple[Sequence[str], int
 
 def add_blonde_plus_categories(doc: ProcessedDoc, lines_an):
     """
-    Add the annotated BlonD+ categories to `Doc` object, which is a list of dicts described in `processed_doc`,
+    Add the annotated BlonDe+ categories to `Doc` object, which is a list of dicts described in `processed_doc`,
     i.g. list_of_dict[ {"str": "xxx", "ambiguity": ["xx", "xx", "xx"], "ellipsis": ["xx", "xx", "xx"]} ]
 
     Error Types:
@@ -184,8 +196,12 @@ def add_blonde_plus_categories(doc: ProcessedDoc, lines_an):
                 append_checkpoints(amb_checkpoints, error_type)
             if error_type[0] == "3":  # Ellipsis
                 append_checkpoints(ell_checkpoints, error_type)
-        doc[j]["count_ambiguity"] = amb_checkpoints
-        doc[j]["count_ellipsis"] = ell_checkpoints
+        sent_text = doc[j]["str"]
+        doc[j]["count"]["plus"] = []
+        #print("amb_checkpoints: ", amb_checkpoints)
+        #print(count_plus(sent_text, amb_checkpoints))
+        doc[j]["count"]["plus"].append(count_plus(sent_text, amb_checkpoints))
+        doc[j]["count"]["plus"].append(count_plus(sent_text, ell_checkpoints))
 
 
 def refine_NER(doc: ProcessedDoc, lines_ner):
@@ -210,8 +226,7 @@ def refine_NER(doc: ProcessedDoc, lines_ner):
             entity_type = entity_type.split("(")[1]
             entities = entity_type.split(";")[:-1]
             for entity in entities:
-                name = entity.split(":")[0]
+                name = entity.split(":")[0].strip(' ').lower().split("'s")[0].split("’s")[0].split("'")[0]
                 count = int(entity.split(":")[-1])
                 new_count_ent[i][name] = count
         doc[j]["count_ent"] = new_count_ent
-

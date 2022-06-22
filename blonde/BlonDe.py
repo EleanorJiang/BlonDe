@@ -98,11 +98,7 @@ class BLONDE(Metric):
     """
 
 
-
-
     WEIGHTS_DEFAULTS = WEIGHTS
-
-
 
     SMOOTH_DEFAULTS: Dict[str, Optional[float]] = {
         # The defaults for `floor` and `add-k` are obtained from the following paper
@@ -114,7 +110,6 @@ class BLONDE(Metric):
         'add-k': 1,
         'exp': None,    # No value is required
     }
-
 
     _SIGNATURE_TYPE = BLONDESignature
 
@@ -186,12 +181,10 @@ class BLONDE(Metric):
 
 
     def add_categories(self, plus_categories, weights):
-        self.plus_categories += plus_categories
-        for cat, weight in zip(plus_categories, weights):
-            self.categories[cat] = cat
-            if self.weight_normalize:
-                self._normalize_weight(weight)
-            self.weights[cat] = weight
+        self.categories["plus"] = plus_categories
+        if self.weight_normalize:
+            self._normalize_weight(weights)
+        self.weights["plus"] = weights
 
 
     def compute_blonde(self, s_count: Sequence[Counts],
@@ -225,7 +218,7 @@ class BLONDE(Metric):
     def _compute_score_from_stats(self, stats: Tuple[Sequence[Counts], Sequence[Counts]]) -> BLONDEScore:
         s_count = stats[0]
         max_r_count = stats[1]
-        return self.compute_blonde(s_count, max_r_count)
+        return self.compute_blonde(s_count, max_r_count, weights=self.weights)
 
     def _aggregate_and_compute(self, stats: Tuple[Sequence[Sequence[Counts]], Sequence[Sequence[Counts]]]) -> BLONDEScore:
         """Computes the final BLEU score given the pre-computed corpus statistics.
@@ -235,7 +228,7 @@ class BLONDE(Metric):
         """
         s_count = [item for doc_stats in stats[0] for item in doc_stats]
         max_r_count = [item for doc_stats in stats[1] for item in doc_stats]
-        return self.compute_blonde(s_count, max_r_count)
+        return self.compute_blonde(s_count, max_r_count, weights=self.weights)
 
     def _extract_max_reference_sent(self, list_of_sent_r: Sequence[ProcessedSent]) -> Counts:
         """
@@ -246,7 +239,7 @@ class BLONDE(Metric):
         for category, types in self.categories.items():
             max_sent_r_count[category] = {}
             list_of_count_r = [sent_r["count"][category] for sent_r in list_of_sent_r]  # length of k
-            if category == "entity" or category == "n-gram":
+            if category in ["entity", "n-gram", "plus"]:
                 for n, _ in enumerate(types):
                     # a counter of all i-grams
                     # for each ngrams, we find the max counter
@@ -348,6 +341,13 @@ class BLONDE(Metric):
 
         # process the hypothesis corpus
         processed_hypotheses = process_corpus(hypotheses, self.categories, lowercase=self.lowercase)
+
+        # add annotation
+        if annotation is not None:
+            for i, (hyp_doc, lines_an) in enumerate(zip(processed_hypotheses, annotation)):
+                assert len(hyp_doc) == len(lines_an), f"{i}-th doc: On no! len(hyp_doc) != len(lines_an)"
+                add_blonde_plus_categories(hyp_doc, lines_an)
+
         corpus_s_count = [[sent_s['count'] for sent_s in doc_s] for doc_s in processed_hypotheses]
 
         return corpus_s_count, max_corpus_r_count

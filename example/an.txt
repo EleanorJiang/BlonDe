@@ -1,0 +1,30 @@
+Joe clenched his fist and bowed his head.	4,Joe <pos/1,3>	3,her, his <pos/35,37>
+In fact, he's right.	2	5
+I am a fool, even will believe the love on the Internet.	2	5
+She ticked her lips, took a deep breath, and was about to put her phone down, but weChat was blown open.	6	1,bombarded, blown open <pos/94,103>
+She nodded in and found it was a cold powder group, and everyone was on her.	1,logged, nodded <pos/5,10>	4,cold powder group <pos/34,50>
+Joe: What's the matter?	4,Joe <pos/1,3>
+Chuan-flowing: Joe love, quickly look at the micro-blogging headlines! Weibo headlines?	4,Chuan-flowing <pos/1,13>;Joe love <pos/18,25>;micro-blogging <pos/50,63>
+She took a slight look, picked up the phone, landed on the micro-blog, when she saw the headlines, the whole person suddenly choked!	1,logged, landed on <pos/46,54>	6
+The show's release. Shen Liangchuan was invited to appear, the director immediately greeted him with respect, politely said this to him, expressed his gratitude for his arrival.	0
+Shen Liangchuan did not speak, look not far from Wang Wenhao.	6
+After Wang Wenhao's accident, all the works were off the shelves, and this play can also be broadcast, because Wang Wenhao in the friendship played by the male no. 3 play is very few, almost negligible.	1,taken, off the shelves <pos/50,64>	5	6
+The crew did not invite Wang Wenhao, but he did not know where to get the invitation, his own entrance. Of course he's coming in.	5
+This is his last chance.	5
+The scandal broke, and almost all advertisers and crews broke his contract with him.	2	6
+He would rather shoot the men's number three now than be silent about it.	1,fade, be silent about <pos/55,69>	6
+Because of his affairs, there is no pressure.	5	6
+So Wang Wenhao at the press conference, everywhere to please others.	6
+Shen Liangchuan wearing a dark gray suit, cold-faced, hand with a high-footed champagne glass, standing next to the table, the whole person appears extra or less handsome, but also extraordinarily cold, so that people around are afraid to come forward. He is a man, is a world.	1,very, extra or less <pos/149,161>;icy, cold <pos/200,203>	5
+But if you can notice him, you will find his sight, but always if there is nothing floating to Wang Wenhao body.	6	5	7
+Songcheng stood by his side, aware of this, can not help but pull his arm.	5
+Shen Liangchuan faint lying back, looked at him, blind inquiry.	6	7
+"Shen brother, what the hell are you doing? Can you tell me so that I have a mental preparation. You suddenly ran over to attend the launch of such a small group, and said nothing so, I panicked. "	1,press, launch <pos/135,140>
+Shen Said, took a sip of champagne, and then put the champagne glass down.	6
+Immediately, he took a slender step.	1,long stride,slender step <pos/24,35>
+Songcheng's heart was raised and followed immediately behind him. Shen Liangchuan step by step forward, walked forward.	1,nervous, raised <pos/23,28>	6
+Wang Wenhao is with other third-rate star-studded sets, the man asked, "I heard you hit a paparazzi?" "	6	5
+"Yeah, the paparazzi are disgusting now, I've wanted to teach them! "You're not afraid to feud with them, " he said. 	0
+"I'm all there, what am I afraid of? At the beginning Shen Shadow Emperor to self-defense as an excuse, a paparazzi hit, to the court to go to the court is not it"?	4,Shen Shadow Emperor <pos/56,74>	5	7
+Wang Wenhao said here, hey hey smile. Want to say something, suddenly realized that someone behind him is close.	3,He, Want to <pos/39,45>	6	1,approaching, close <pos/109,113>	5	7
+He looked back, he saw Shen Liangchuan, eyes shrink, licking his face and smiling, but saw Shen Liangchuan a step forward, a holding his collar, and then a fist to his face hit!	3,his, eyes <pos/41,44>	6	7

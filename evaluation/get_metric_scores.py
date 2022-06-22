@@ -11,7 +11,7 @@ from util.logging_util import init_logging
 from util.csv_util import list2txt, txt2list
 from evaluation.dataset import load_corpus
 # For BlonDe
-from BlonDe.BlonDe import BlonDe
+from blonde import BLONDE
 # For other metrics
 import sacrebleu
 from other_metrics.rc import lc_and_rc
@@ -21,20 +21,7 @@ from nlgeval import compute_metrics
 """
 We report the scores of the following metrics.
 """
-METRICS = ["BLEU",
-           "dB-r", "dB-p", "dB-F1",  # dBlonDe (recall, precision, F1)
-           "sB-r", "sB-p", "sB-F1",  # BlonDe (recall, precision, F1)
-           "sBp-r", "dBp-r",  # BlonDe plus (recall only)
-           # Linguistics Phenomena: enity, pronoun, verb, ambiguity, ellipsis (recall, precision, F1)
-           # "entity-r", "pron-r", "verb-r", "dm-r", "amb-r", "ell-r",
-           # "entity-p", "pron-p", "verb-p",
-           # "entity-F1", "pron-F1", "verb-F1",
-           # Other Metrics:
-           "lc", "rc",  # (Wong and Kit, 2012)
-           # "NLGEval"
-           # "METEOR", "TER", "ROUGE", "CIDEr",  # Sentence-level Metrics (other than BLUE)
-           # "SkipThoughts", "Embedding", 'Vector', "GreedyMatching"  # Embedding-based Metrics
-           ]
+METRICS = ["BLEU", "BLONDE", "NLGEval", "rc"]
 
 """
 We test upon the following systems.
@@ -131,7 +118,7 @@ class Evaluate:
         We treat a book as a corpus, and evaluate metrics by book, since the domains may differ among books.
         return `score_df`: a panda dataframe, where the columns are ['book-chap', 'system', BLEU, BlonDe-r, ...]
         """
-        BlonDe_plus = BlonDe(average_method='geometric',
+        BlonDe_plus = BLONDE(average_method='geometric',
                            references=[ref_corpus],
                            annotation=an_corpus,
                            ner_refined=ner_corpus
@@ -228,7 +215,7 @@ def get_args():
     """ Defines generation-specific hyper-parameters. """
     parser = argparse.ArgumentParser('Sequence to Sequence Model')
     parser.add_argument('--seed', default=42, type=int, help='pseudo random number generator seed')
-    parser.add_argument('--data_dir', default='/PATH/TO/DATA/BWB_dataset', help='path to data directory')
+    parser.add_argument('--data_dir', default='../../DATA/BWB_dataset', help='path to data directory')
     parser.add_argument('--out_dir', default='output', help='path to the ourput directory')
     parser.add_argument('--df_name', default='score_df', help='the name of the output csv file.')
     parser.add_argument('--tmp_dir', default='.tmp', help='path to the temporary output of evaluation data')
@@ -244,7 +231,7 @@ def get_args():
 
 
 def main(args):
-    metrics, systems = METRICS, SYSTEMS
+    metrics, systems, choosed_books = METRICS, SYSTEMS, None
     if args.metrics is not None:
         metrics = args.metrics.split(',')
     if args.systems is not None:

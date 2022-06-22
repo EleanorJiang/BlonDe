@@ -14,7 +14,7 @@ from typing import Sequence, Sequence, Any, Optional, Dict, Tuple
 from abc import ABCMeta, abstractmethod
 from .utils import Counts
 
-sacrelogger = logging.getLogger('sacrebleu')
+logger = logging.getLogger('BlonDe')
 
 
 class Score:
@@ -260,6 +260,7 @@ class Metric(metaclass=ABCMeta):
 
     def corpus_score(self, hypotheses: Sequence[Sequence[str]],
                      references: Optional[Sequence[Sequence[Sequence[str]]]] = None,
+                     annotation: Optional[Sequence[Sequence[str]]]=None,
                      n_bootstrap: int = 1) -> Any:
         """Compute the metric for a corpus against a single (or multiple) reference(s).
 
@@ -267,6 +268,7 @@ class Metric(metaclass=ABCMeta):
         :param references: A list of reference corpora.
         defined as a sequence of reference strings. If `None`, cached references
         will be used.
+        :param annotation: A list of annotation lines, same as hypotheses. If `None`, no annotation.
         :param n_bootstrap: If > 1, provides 95% confidence interval around true mean
         using bootstrap resampling with `n_bootstrap` samples.
         :return: A `Score` object.
@@ -274,7 +276,7 @@ class Metric(metaclass=ABCMeta):
         self._check_corpus_score_args(hypotheses, references)
 
         # Collect corpus stats
-        corpus_s_count, max_corpus_r_count = self._extract_corpus_statistics(hypotheses, references)
+        corpus_s_count, max_corpus_r_count = self._extract_corpus_statistics(hypotheses, references, annotation=annotation)
         stats = (corpus_s_count, max_corpus_r_count)
         # Compute the actual system score
         actual_score = self._aggregate_and_compute(stats)

@@ -6,7 +6,7 @@ import math
 from collections import Counter, defaultdict
 from typing import Sequence, Tuple, Dict, Any
 from operator import itemgetter
-from blonde.utils import Weight, Counts, compute_F1, safe_devide, union, intersect, diff, geo_average, arm_average
+from .utils import Weight, Counts, compute_F1, safe_devide, union, intersect, diff, geo_average, arm_average
 from operator import itemgetter
 import numpy as np
 
@@ -27,8 +27,8 @@ def sim(sent_s_count: Counts, max_sent_r_count: Counts, weights: Weight, categor
     for category, weight_list in weights.items():
         sys_counts = sent_s_count[category]
         ref_counts = max_sent_r_count[category]
-        if category == "n-gram":
-            for i, n in enumerate(categories["n-gram"]):
+        if category == "n-gram" or category == "plus":
+            for i, n in enumerate(categories[category]):
                 # a counter of all i-grams
                 # for each ngrams, we find the max counter
                 all_ngram = union(ref_counts[i], sys_counts[i])
@@ -40,7 +40,7 @@ def sim(sent_s_count: Counts, max_sent_r_count: Counts, weights: Weight, categor
                     denominator_s[n] += weight_list[i] * sys_counts[i][ngram]
                     similarity += numerator[n]
         elif category == "entity":
-            for i, _ in enumerate(categories["entity"]):
+            for i, _ in enumerate(categories[category]):
                 # a counter of all i-grams
                 # for each ngrams, we find the max counter
                 all_ngram = union(ref_counts[i], sys_counts[i])
