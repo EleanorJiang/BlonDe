@@ -97,67 +97,159 @@ python -m unittest discover
 ```
 
 ### Usage
+We provide a command line interface (CLI) of BlonDe as well as a python 
+module. 
+We provide example inputs under `./example`.
+
 ### Command-line Usage
+You can use it as follows for the simplest usage:
 ```sh
 blonde -r example/ref.txt -s sys.txt
 ```
 
+To use human-annotated spans for `BlonDe+`, 
+add `-p` and provide the annotation file path with `-an`, as in:
+```sh
+blonde -r example/ref.txt -s sys.txt -p -an example/an.txt
+```
+
+To use human-annotated named entities (instead of automatic detected ones), 
+add `-p` and provide the named entity file path with `-ner`, as in:
+```sh
+blonde -r example/ref.txt -s sys.txt -p -ner example/ner.txt
+```
+#### The full list of named arguments:
+General arguments:
+```
+  -h, --help            show this help message and exit
+  -r REFERENCE [REFERENCE ...], --reference REFERENCE [REFERENCE ...]
+                        reference file path(s), each line is a sentence
+  -s SYSTEM, --system SYSTEM
+                        system file path, each line is a sentence
+  --version, -V         show program's version number and exit
+```
+BlonDe-related arguments:
+```
+  --categories CATEGORIES [CATEGORIES ...], -c CATEGORIES [CATEGORIES ...]
+                        The categories of BLONDE. 
+                        Default: ('tense', 'pronoun', 'entity', 'dm', 'n-gram')
+  --average-method {geometric,arithmetic}, -aver {geometric,arithmetic}
+                        The average method to use, geometric or arithmetic.
+                        Defaults: geometric
+  --smooth-method {none,floor,add-k,exp}, -sm {none,floor,add-k,exp}
+                        Smoothing method: exponential decay, floor (increment zero counts), add-k (increment num/denom by k for n>1), or none.
+                        Default: exp
+  --smooth-value SMOOTH_VALUE, -sv SMOOTH_VALUE
+                        The smoothing value. Only valid for floor and add-k. 
+                        Defaults: floor: 0.1, add-k: 1
+  --lowercase LOWERCASE, -lc LOWERCASE
+                        If True, enables case-insensitivity. Default: True
+```
+Weight-related arguments:
+```
+  --override-weights, -w
+                        Whether to customize the weights of BLONDE
+  --reweight, -rw       Whether to reweight the weights of BLONDE to 1
+  --weight-tense WEIGHT_TENSE [WEIGHT_TENSE ...], -wt WEIGHT_TENSE [WEIGHT_TENSE ...]
+                        The weights of TENSE (verb types), should be a tuple of length 7, corresponds to ('VBD', 'VBN', 'VBP',
+                        'VBZ', 'VBG', 'VB', 'MD'). Defaults: (1/7, 1/7, 1/7, 1/7, 1/7, 1/7, 1/7). Only valid when `override_weights`
+                        is used
+  --weight-pronoun WEIGHT_PRONOUN [WEIGHT_PRONOUN ...], -wp WEIGHT_PRONOUN [WEIGHT_PRONOUN ...]
+                        The weights of PRONOUN, should be a tuple of length 4, corresponds to ('masculine', 'feminine', 'neuter',
+                        'epicene'). Defaults: (0.5, 0.5, 0, 0). Only valid when `override_weights` is used
+  --weight-entity WEIGHT_ENTITY [WEIGHT_ENTITY ...], -we WEIGHT_ENTITY [WEIGHT_ENTITY ...]
+                        The weights of PERSON and NONPERSON entities, Defaults: (1/2, 1/2). Only valid when `override_weights` is
+                        used
+  --weight-discourse-marker WEIGHT_DISCOURSE_MARKER [WEIGHT_DISCOURSE_MARKER ...], -wdm WEIGHT_DISCOURSE_MARKER [WEIGHT_DISCOURSE_MARKER ...]
+                        The weights of DISCOURSE MARKER, should be a tuple of length 5, corresponds to ('comparison', 'cause',
+                        'conjunction', 'asynchronous', 'synchronous'). Defaults: (0.5, 0.5, 0, 0). Only valid when
+                        `override_weights` is used
+```
+BlonDe+ related arguments, annotation required:
+```
+  --plus, -p            Whether to add BLONDE PLUS categories. If so, please provide annotation files that are in the required
+                        format.
+  --annotation ANNOTATION, -an ANNOTATION
+                        Annotation file path, each line is the annotation corresponding a sentence. See README for annotation format
+  --ner-refined NER_REFINED, -ner NER_REFINED
+                        Named entity file path, each line is the named entities corresponding a sentence. If provided, the annotated
+                        named entities instead of the automated recognized ones are used in BLONDE. See README for named entity
+                        annotation format
+  --plus-categories PLUS_CATEGORIES [PLUS_CATEGORIES ...], -pc PLUS_CATEGORIES [PLUS_CATEGORIES ...]
+                        The categories that your annotation files contain, Defaults: ('ambiguity', 'ellipsis'). Only valid when
+                        `plus` is used
+  --plus-weights PLUS_WEIGHTS [PLUS_WEIGHTS ...], -pw PLUS_WEIGHTS [PLUS_WEIGHTS ...]
+                        The corresponding weights of plus categories, should be in the same length as `plus_categories`. Defaults:
+                        (1, 1). Only valid when `plus` is used
+```
+
 
 ### Using BlonDe from Python
-Following [SacreBLEU](https://github.com/mjpost/sacrebleu), we also recommend users to use the object-oriented API, by creating an instance of the ``BLONDE`` class.
+Following [SacreBLEU](https://github.com/mjpost/sacrebleu), we also recommend users to use the object-oriented API, by creating an instance of the `BLONDE` class.
 A detailed example is provided in ``example.py``.
 
 #### Loading Package and creating an ``BLONDE`` object:
- ```
-        from blonde import BLONDE
-        blonde = BLONDE()
-   ```
+ ```python
+from blonde import BLONDE
+blonde = BLONDE()
+```
 #### For a single document:
- ```
-        score = blonde.corpus_score([sys_doc], [[ref_doc_1], [ref_doc_2], ...])
+ ```python
+score = blonde.corpus_score([sys_doc], [[ref_doc_1], [ref_doc_2], ...])
    ```
 where  ``sys_doc``, ``ref_doc_1`` and ``ref_doc_2`` are  ``List[str]``.
 
 #### For a corpus:
- ```
-        score = blonde.corpus_score(sys_corpus, [ref_corpus_1, ref_corpus_2, ...])
-   ```
+```python
+score = blonde.corpus_score(sys_corpus, [ref_corpus_1, ref_corpus_2, ...])
+```
 where ``sys_corpus``, ``ref_corpus_1`` and ``ref_corpus_2`` are ``List[List[str]]``.
 
 #### For multiple systems & statistical testing:
- ```
-        blonde = BLONDE(references=[ref_corpus]) # for faster recomputation
-        score = blonde.corpus_score(sys_corpus)
-   ```
+ ```python
+blonde = BLONDE(references=[ref_corpus]) # for faster recomputation
+score = blonde.corpus_score(sys_corpus)
+```
 
-#### BlonD+:
- ```
-        blonde_plus = BLONDE(average_method='geometric',
-                           references=[ref_corpus],
-                           annotation=an_corpus,
-                           ner_refined=ner_corpus
-                           )
-        score = blonde_plus.corpus_score(sys_corpus)
-   ```
+#### BlonDe+:
+ ```python
+blonde_plus = BLONDE(references=[ref_corpus],
+                     annotation=an_corpus,
+                     ner_refined=ner_corpus
+                 )
+score = blonde_plus.corpus_score(sys_corpus)
+  ```
 
 #### Adjust parameters:
- ```
-        blonde_plus = BLONDE(weights: Dict[str, Union[Tuple[float], float]]=None,
-                          weight_normalize: bool = False,
-                          average_method: str = 'geometric',
-                          categories: dict = CATEGORIES,
-                          plus_categories=None,  # ("ambiguity", "ellipsis")
-                          plus_weights=(1, 1),
-                          lowercase: bool = False,
-                          smooth_method: str = 'exp',
-                          smooth_value: Optional[float] = None,
-                          effective_order: bool = False,
-                          references: Optional[Sequence[Sequence[Sequence[str]]]] = None,
-                          annotation: Sequence[Sequence[str]] = None,
-                          ner_refined: Sequence[Sequence[str]] = None)
-                           )
-        score = blonde_plus.corpus_score(sys_corpus, [ref_corpus_1, ref_corpus_2, ...])
-   ```
+ ```python
+BLONDE(weights: Weight=WEIGHTS_DEFAULTS,
+       weight_normalize: bool = False,
+       average_method: str = 'geometric',
+       categories: dict = CATEGORIES,
+       plus_categories=None,  # ("ambiguity", "ellipsis")
+       plus_weights=(1, 1),
+       lowercase: bool = False,
+       smooth_method: str = 'exp',
+       smooth_value: Optional[float] = None,
+       effective_order: bool = False,
+       references: Optional[Sequence[Sequence[Sequence[str]]]] = None,
+       annotation: Sequence[Sequence[str]] = None,
+       ner_refined: Sequence[Sequence[str]] = None)
+```
+| Parameter | Description !
+|-----------|-------------|
+| categories | A dict where the keys are chosen from `('tense', 'pronoun', 'entity', 'n-gram')`, and the keys are the names of features in different categories, Dict[str, Sequence[str]]. If `None`, `('tense', 'pronoun', 'entity', 'n-gram')` are included.
+| weights | The weights of the aerformentioned features, Dict[str, Sequence[float]]. If `None`, uniform weights are adopted. 
+| plus_categories | The human annotated categories, e.g. `('ambiguity', 'ellipsis')` (default: None)
+| plus_weights | The weights of the human annotated categories (default: `None`)
+| weight_normalize | Whether to reweight to 1 (default: `False`)
+| lowercase | If `True`, lowercased BLONDE is computed.
+| average_method| The average method to use. Choose from `('geometric', 'arithmetic')`.
+| smooth_method| The smoothing method to use. Choose from `('floor', 'add-k', 'exp' or 'none')`.
+| smooth_value | The smoothing value for `floor` and `add-k` methods. `None` falls back to default value.
+| max_ngram_order| If given, it overrides the maximum n-gram order (default: `4`).
+| effective_order| If `True`, stop including n-gram orders for which score is 0. This should be `True`, if sentence-level BLONDE will be computed.
+| references| A sequence of reference documents with document being defined as a sequence of reference strings. If given, the reference n-grams and lengths will be pre-computed and cached for faster BLONDE computation across many systems.
 
 [comment]: <> (#### Cohesion Score &#40;beta&#41;:)
 
@@ -198,14 +290,17 @@ where ``sys_corpus``, ``ref_corpus_1`` and ``ref_corpus_2`` are ``List[List[str]
 [comment]: <> (  In the NLTK Downloader window, choose ``wordnet``.)
 
 ## The BWB dataset:
+
+### Dataset Overview
+![<img align="right" width="400">](image/bwb_dataset_stats.jpg)
 The BWB dataset is a large-scale document-level Chinese--English parallel dataset.
 It consists of Chinese online novels across multiple genres (sci-fi, romance, action, fantasy, comedy, etc.) 
 and their corresponding English translations crawled from the Internet.
 The novels are translated by professional native English speakers, and are corrected by editors.
 
-To the best of our knowledge, this is the largest Chinese-English document-level translation dataset to date. 
+To the best of our knowledge, this is the largest document-level translation dataset to date. 
 
-### Statistics
+#### The Statistics of BWB:
 
 |      |   Train   |  Test  |  Dev  |  Total  |
 |-----------|-------------|-----------|-----------|-----------|
@@ -233,14 +328,15 @@ To the best of our knowledge, this is the largest Chinese-English document-level
 - To prevent any train-test leakage, we split the dataset into a training, development and a test set such that chapters from the same book are part of the same split. 
 
 
-### The Annotated Test Set
+### Annotation Format
+The test set of BWB is annotated.
 For each document, there are:
 - ``chs_re.txt``: the original Chinese document. Each line is a sentence.
 - ``ref_re.txt``: the reference English document. Each line is a sentence.
 - ``ner_re.txt``: the named entities that appear in each sentence and their counts in the sentence.
 - ``an.txt``: the error type, along with the spans that may cause ``ambiguity`` or ``ellipsis``.
 
-**Error Type:**
+**Error Types:**
 
 |  Error Type    |   #id   |  Description  |  With Span Annotation  |  
 |-----------|-------------|-----------|-----------|
@@ -392,3 +488,5 @@ Wang Wenhao is with other third-rate star-studded sets, the man asked, "I heard 
 Wang Wenhao said here, hey hey smile. Want to say something, suddenly realized that someone behind him is close.	3,He, Want to <pos/39,45>	6	1,approaching, close <pos/109,113>	5	7
 He looked back, he saw Shen Liangchuan, eyes shrink, licking his face and smiling, but saw Shen Liangchuan a step forward, a holding his collar, and then a fist to his face hit!	3,his, eyes <pos/41,44>	6	7
 ```
+### Download
+Download the BWB dataset from [this Google Drive link](https://drive.google.com/drive/folders/12K1-DWmpEdqkaR_61aogdywsALDg4z1L?usp=sharing).
