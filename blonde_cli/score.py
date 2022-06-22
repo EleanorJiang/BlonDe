@@ -95,7 +95,7 @@ def main():
                 assert len(curr_ref) == len(sys), f"# of sentences in {ref_file} doesn't match the # of candidates"
                 refs.append([curr_ref])
         refs = list(zip(*refs))
-    elif os.path.isfile(args.ref[0]):
+    elif os.path.isfile(args.reference[0]):
         assert os.path.exists(args.cand), f"system file {args.cand} doesn't exist"
 
     categories = {}
