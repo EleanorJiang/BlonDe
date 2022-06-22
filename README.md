@@ -50,7 +50,7 @@ Please see [release logs](https://github.com/EleanorJiang/CHANGELOG.md) for olde
 
 ### Package Overview
 
-![<img align="right" width="300">](image/blonde_motivation.png)
+<img align="right" width="300" src="image/blonde_motivation.png">
 
 Standard automatic metrics, e.g. BLEU, are not reliable for document-level MT evaluation. They can neither distinguish document-level improvements in translation quality from sentence-level ones, nor identify the discourse phenomena that cause context-agnostic translations.
 
@@ -292,7 +292,7 @@ BLONDE(weights: Weight=WEIGHTS_DEFAULTS,
 ## The BWB dataset:
 
 ### Dataset Overview
-<img align="right" width="100" src="image/blonde_motivation.png">
+![<img align="right" width="400">](image/bwb_dataset_stats.jpg)
 The BWB dataset is a large-scale document-level Chinese--English parallel dataset.
 It consists of Chinese online novels across multiple genres (sci-fi, romance, action, fantasy, comedy, etc.) 
 and their corresponding English translations crawled from the Internet.
