@@ -10,8 +10,8 @@ sys.path.insert(0, '.')
 from util.logging_util import init_logging
 from util.csv_util import list2txt, txt2list
 from evaluation.dataset import load_corpus
-# For BlonD
-from blonde.BlonDe import BLOND
+# For BlonDe
+from BlonDe.BlonDe import BlonDe
 # For other metrics
 import sacrebleu
 from other_metrics.rc import lc_and_rc
@@ -22,9 +22,9 @@ from nlgeval import compute_metrics
 We report the scores of the following metrics.
 """
 METRICS = ["BLEU",
-           "dB-r", "dB-p", "dB-F1",  # dBlonD (recall, precision, F1)
-           "sB-r", "sB-p", "sB-F1",  # BlonD (recall, precision, F1)
-           "sBp-r", "dBp-r",  # BlonD plus (recall only)
+           "dB-r", "dB-p", "dB-F1",  # dBlonDe (recall, precision, F1)
+           "sB-r", "sB-p", "sB-F1",  # BlonDe (recall, precision, F1)
+           "sBp-r", "dBp-r",  # BlonDe plus (recall only)
            # Linguistics Phenomena: enity, pronoun, verb, ambiguity, ellipsis (recall, precision, F1)
            # "entity-r", "pron-r", "verb-r", "dm-r", "amb-r", "ell-r",
            # "entity-p", "pron-p", "verb-p",
@@ -44,7 +44,7 @@ PART_SYSTEMS = ["smt", "ms", "sent", "ctx", "pe"]  # for human evaluation
 
 
 class Evaluate:
-    def __init__(self, data_dir, output_dir, tmp_dir, metrics, systems, show_blond_detail=False, set='test',
+    def __init__(self, data_dir, output_dir, tmp_dir, metrics, systems, show_BlonDe_detail=False, set='test',
                  chosen_books=None):
         self.data_dir = data_dir
         self.output_dir = output_dir
@@ -52,7 +52,7 @@ class Evaluate:
         self.metrics = metrics
         self.systems = systems
         self.chosen_books = chosen_books
-        self.show_blond_detail = show_blond_detail
+        self.show_BlonDe_detail = show_BlonDe_detail
         self.set = set
         datasets, ref_dataset, an_dataset, ner_dataset, book_names = load_corpus(data_dir, set)
         self.datasets = datasets
@@ -60,6 +60,7 @@ class Evaluate:
         self.an_dataset = an_dataset
         self.ner_dataset = ner_dataset
         self.book_names = book_names
+        self.do_lc_and_rc = False
         if 'rc' in metrics:
             self.do_lc_and_rc = True
 
@@ -80,21 +81,21 @@ class Evaluate:
         score_df = pd.DataFrame.from_dict(scores)
         score_df.to_csv(os.path.join(output_dir, f'{name}.csv'), index=False)
 
-    def _append_scores(self, scores, corpus, flat_corpus, blond_plus=None, bleu=None, ter=None,
+    def _append_scores(self, scores, corpus, flat_corpus, BlonDe_plus=None, bleu=None, ter=None,
                       nlgeval_txt: Tuple[str, List[str]]=None):
-        blond_score = blond_plus.corpus_score(corpus, None)  # we use cached references
+        BlonDe_score = BlonDe_plus.corpus_score(corpus, None)  # we use cached references
         bleu_score = bleu.corpus_score(flat_corpus, None)
         ter_score = ter.corpus_score(flat_corpus, None)
         scores["BLEU"].append(bleu_score.score)
-        scores["BlonD_plus-r"].append(blond_score.recall)
-        scores["BlonD_plus-p"].append(blond_score.precision)
-        scores["BlonD_plus-F1"].append(blond_score.F1)
-        scores["BlonD-r"].append(blond_score.detail['recalls']['sBlonD'])
-        scores["BlonD-p"].append(blond_score.detail['precisions']['sBlonD'])
-        scores["BlonD-F1"].append(blond_score.detail['F1s']['sBlonD'])
-        scores["dBlonD-r"].append(blond_score.detail['recalls']['dBlonD'])
-        scores["dBlonD-p"].append(blond_score.detail['precisions']['dBlonD'])
-        scores["dBlonD-F1"].append(blond_score.detail['F1s']['dBlonD'])
+        scores["BlonDe_plus-r"].append(BlonDe_score.recall)
+        scores["BlonDe_plus-p"].append(BlonDe_score.precision)
+        scores["BlonDe_plus-F1"].append(BlonDe_score.F1)
+        scores["BlonDe-r"].append(BlonDe_score.detail['recalls']['sBlonDe'])
+        scores["BlonDe-p"].append(BlonDe_score.detail['precisions']['sBlonDe'])
+        scores["BlonDe-F1"].append(BlonDe_score.detail['F1s']['sBlonDe'])
+        scores["dBlonDe-r"].append(BlonDe_score.detail['recalls']['dBlonDe'])
+        scores["dBlonDe-p"].append(BlonDe_score.detail['precisions']['dBlonDe'])
+        scores["dBlonDe-F1"].append(BlonDe_score.detail['F1s']['dBlonDe'])
         scores["ter_score"].append(ter_score.score)
         if self.do_lc_and_rc:
             rc, lc = lc_and_rc(flat_corpus)
@@ -110,10 +111,10 @@ class Evaluate:
             scores["Embedding"].append(metrics_dict['EmbeddingAverageCosineSimilarity'])
             scores["Vector"].append(metrics_dict['VectorExtremaCosineSimilarity'])
             scores["GreedyMatching"].append(metrics_dict['GreedyMatchingScore'])
-        if self.show_blond_detail:
-            for measure, score_dict in blond_score.detail.items():
+        if self.show_BlonDe_detail:
+            for measure, score_dict in BlonDe_score.detail.items():
                 for key, score in score_dict.items():
-                    if key not in ['sBlonD', 'dBlonD']:
+                    if key not in ['sBlonDe', 'dBlonDe']:
                         scores[f"{key}-{measure[:1]}"].append(score)
         for key, values in scores.items():
             if type(values[-1]) is str or type(values[-1]) is int:
@@ -128,9 +129,9 @@ class Evaluate:
         
         """
         We treat a book as a corpus, and evaluate metrics by book, since the domains may differ among books.
-        return `score_df`: a panda dataframe, where the columns are ['book-chap', 'system', BLEU, BlonD-r, ...]
+        return `score_df`: a panda dataframe, where the columns are ['book-chap', 'system', BLEU, BlonDe-r, ...]
         """
-        blond_plus = BLOND(average_method='geometric',
+        BlonDe_plus = BlonDe(average_method='geometric',
                            references=[ref_corpus],
                            annotation=an_corpus,
                            ner_refined=ner_corpus
@@ -153,7 +154,7 @@ class Evaluate:
                 # flat_corpus_2 = txt2list(sys_txt)
                 # assert len(flat_corpus_2) == len(flat_corpus), "Oh no! list2txt is not working properly!"
                 nlgeval_txt = (sys_txt, [ref_txt])
-            self._append_scores(scores, corpus, flat_corpus, blond_plus,
+            self._append_scores(scores, corpus, flat_corpus, BlonDe_plus,
                           bleu, ter, nlgeval_txt)
         return scores
 
@@ -178,7 +179,7 @@ class Evaluate:
     def get_actual_corpus_scores(self):
         """
         We treat a book as a corpus, and evaluate metrics by book, since the domains may differ among books.
-        return `score_df`: a panda dataframe, where the columns are ['book-chap', 'system', BLEU, BlonD-r, ...]
+        return `score_df`: a panda dataframe, where the columns are ['book-chap', 'system', BLEU, BlonDe-r, ...]
         """
         scores = defaultdict(list)
         for book_id, (ref_corpus, an_corpus, ner_corpus) in enumerate(zip(self.ref_dataset, self.an_dataset, self.ner_dataset)):
@@ -232,11 +233,11 @@ def get_args():
     parser.add_argument('--df_name', default='score_df', help='the name of the output csv file.')
     parser.add_argument('--tmp_dir', default='.tmp', help='path to the temporary output of evaluation data')
     parser.add_argument('--systems', default=None, type=str, help='Choose from SYSTEMS, for example: smt, ms, google ...')
-    parser.add_argument('--metrics', default=None, type=str, help='Choose from METRICS, for example: BlEU, BlonD, NLGEval')
-    parser.add_argument('--para', default=None, type=str, help='hyper parameters for BLOND, separated by `,`')
+    parser.add_argument('--metrics', default=None, type=str, help='Choose from METRICS, for example: BlEU, BlonDe, NLGEval')
+    parser.add_argument('--para', default=None, type=str, help='hyper parameters for BlonDe, separated by `,`')
     parser.add_argument('--log_file', default='evaluate.log', help='specify the log file')
     parser.add_argument('--n_samples', default=10, type=int, help='the number of samples for bootstrap resampling')
-    parser.add_argument('--detail', default=True, type=bool, help= 'for BlonD, to print the scores of different linguistics categories')
+    parser.add_argument('--detail', default=True, type=bool, help= 'for BlonDe, to print the scores of different linguistics categories')
     parser.add_argument('--books',default=None, type=str, help='Choose from book0, book1, book153, book216,book270,book383')
 
     return parser.parse_args()
