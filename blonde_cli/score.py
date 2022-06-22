@@ -112,13 +112,20 @@ def main():
             "n-gram": (0.25, 0.25, 0.25, 0.25)
             }
 
-    plus_categories, plus_weights, annotation = None, None, None
+    plus_categories, plus_weights, annotation, ner_refined = None, None, None, None
     if args.plus:
         plus_categories = args.plus_categories
         plus_weights = args.plus_weights
         if os.path.isfile(args.annotation):
             with open(args.annotation) as f:
                 annotation = [[line.strip() for line in f]]
+    if args.ner_refined:
+        if os.path.isfile(args.ner_refined):
+            with open(args.annotation) as f:
+                ner_refined = [[line.strip() for line in f]]
+        else:
+            assert os.path.exists(args.ner_refined), f"ner file {args.ner_refined} doesn't exist"
+
 
     blond = BLONDE(weights=weights,
                  weight_normalize=args.reweight,
