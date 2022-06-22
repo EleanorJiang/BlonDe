@@ -1,5 +1,0 @@
-blonde
-blonde_cli
-evaluation
-other_metrics
-util
