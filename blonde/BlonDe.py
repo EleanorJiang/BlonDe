@@ -1,28 +1,29 @@
 """
-The implementation of the BlonD metric.
-Adapted from Sacreblond.
+The implementation of the BlonDe metric.
+Adapted from Sacreblonde.
 """
 
 import math
 import logging
 from importlib import import_module
-from .processing import CATEGORIES, process_corpus, add_blond_plus_categories, refine_NER
-from .dBlonD import scoring
+from . import WEIGHTS, CATEGORIES
+from .processing import process_corpus, add_blonde_plus_categories, refine_NER
+from .dBlonDe import scoring
 from typing import Sequence, Tuple, Dict, Any, Union, Optional, Sequence
 from .utils import normalize, Weight, Counts, ProcessedSent, ProcessedDoc, ProcessedCorpus
 from .base import Score, Signature, Metric
 from collections import Counter, defaultdict
 
-logger = logging.getLogger('BlonD')
+logger = logging.getLogger('BlonDe')
 
 
-class BLONDSignature(Signature):
-    """A convenience class to represent the reproducibility signature for BlonD.
+class BLONDESignature(Signature):
+    """A convenience class to represent the reproducibility signature for BlonDe.
 
     :param args: key-value dictionary passed from the actual metric instance.
     """
     def __init__(self, args: dict):
-        """`BLONDSignature` initializer."""
+        """`BLONDESignature` initializer."""
         super().__init__(args)
 
         self._abbr.update({
@@ -38,10 +39,10 @@ class BLONDSignature(Signature):
         })
 
 
-class BLONDScore(Score):
-    """A convenience class to represent BLOND scores.
+class BLONDEScore(Score):
+    """A convenience class to represent BLONDE scores.
 
-    :param score: The BLOND score.
+    :param score: The BLONDE score.
     :param recall: the overall recall
     :param precision: the overall recall
     :param F1: the overall F1 measure
@@ -54,14 +55,14 @@ class BLONDScore(Score):
     def __init__(self, recall: float, precision: float, F1: float,
                  verbose: Optional[Dict[str, Dict[str, float]]]=None
                  ):
-        """`BLONDScore` initializer."""
-        super().__init__('BLOND', F1)
+        """`BLONDEScore` initializer."""
+        super().__init__('BLONDE', F1)
 
         self.recall = recall
         self.precision = precision
         self.F1 = F1
         self.detail = verbose
-        # The verbose part of BLOND
+        # The verbose part of BLONDE
         # for method in ("recall", "precision", "F1"):
         self.verbose = f"\nR: {recall:.2%}\tP: {precision:.2%}\tF1: {F1:.2%}\n"
         if verbose is not None:
@@ -72,27 +73,36 @@ class BLONDScore(Score):
                 self.verbose += "\n"
 
 
-class BLOND(Metric):
-    """Computes the BLOND metric given hypotheses and references.
+class BLONDE(Metric):
+    """Computes the BLONDE metric given hypotheses and references.
 
-    :param lowercase: If True, lowercased BLOND is computed.
+    :param categories: A dict where the keys are chosen from ('tense', 'pronoun', 'entity', 'n-gram')
+                        and the keys are the names of features in different categories, Dict[str, Sequence[str]]
+                        If `None`, ('tense', 'pronoun', 'entity', 'n-gram')
+    :param weights: The weights of the aerformentioned features, Dict[str, Sequence[float]]
+                        If `None`, uniform weights
+    :param plus_categories: The human annotated categories, e.g. ('ambiguity', 'ellipsis') (default: None)
+    :param plus_weights: The weights of the human annotated categories (default: None)
+    :param weight_normalize: Whether to reweight to 1 (default: False)
+    :param lowercase: If True, lowercased BLONDE is computed.
     :param average_method: The average method to use ('geometric', 'arithmetic').
+    :param smooth_method: The smoothing method to use ('floor', 'add-k', 'exp' or 'none').
+    :param smooth_value: The smoothing value for `floor` and `add-k` methods. `None` falls back to default value.
     :param max_ngram_order: If given, it overrides the maximum n-gram order (default: 4).
     :param effective_order: If `True`, stop including n-gram orders for which score is 0. This should be
-        `True`, if sentence-level BLOND will be computed.
+    `True`, if sentence-level BLONDE will be computed.
     :param references: A sequence of reference documents with document being
     defined as a sequence of reference strings. If given, the reference n-grams
-    and lengths will be pre-computed and cached for faster BLOND computation
+    and lengths will be pre-computed and cached for faster BLONDE computation
     across many systems.
     """
 
-    WEIGHTS_DEFAULTS = {
-        "tense": (1/7, 1/7, 1/7, 1/7, 1/7, 1/7, 1/7),
-        "pronoun": (0.5, 0.5, 0, 0),
-        "entity": (1, 0),
-        "dm": (0.2, 0.2, 0.2, 0.2, 0.2),
-        "n-gram": (0.25, 0.25, 0.25, 0.25)
-    }
+
+
+
+    WEIGHTS_DEFAULTS = WEIGHTS
+
+
 
     SMOOTH_DEFAULTS: Dict[str, Optional[float]] = {
         # The defaults for `floor` and `add-k` are obtained from the following paper
@@ -106,7 +116,7 @@ class BLOND(Metric):
     }
 
 
-    _SIGNATURE_TYPE = BLONDSignature
+    _SIGNATURE_TYPE = BLONDESignature
 
 
 
@@ -123,7 +133,7 @@ class BLOND(Metric):
                  references: Optional[Sequence[Sequence[Sequence[str]]]] = None,
                  annotation: Sequence[Sequence[str]] = None,
                  ner_refined: Sequence[Sequence[str]] = None):
-        """`BLOND` initializer."""
+        """`BLONDE` initializer."""
         super().__init__()
         self.set_weight(weights, weight_normalize)
         self.set_smooth(smooth_method, smooth_value)
@@ -156,12 +166,12 @@ class BLOND(Metric):
 
 
     def set_smooth(self, smooth_method, smooth_value):
-        assert smooth_method in BLOND.SMOOTH_DEFAULTS.keys(), \
+        assert smooth_method in BLONDE.SMOOTH_DEFAULTS.keys(), \
             "Unknown smooth_method {smooth_method!r}"
         self.smooth_method = smooth_method
         # Fetch the default value for floor and add-k
         if smooth_value is None:
-            self.smooth_value = BLOND.SMOOTH_DEFAULTS[smooth_method]
+            self.smooth_value = BLONDE.SMOOTH_DEFAULTS[smooth_method]
 
 
     def _normalize_weight(self, weights):
@@ -184,16 +194,16 @@ class BLOND(Metric):
             self.weights[cat] = weight
 
 
-    def compute_blond(self, s_count: Sequence[Counts],
+    def compute_blonde(self, s_count: Sequence[Counts],
                       max_r_count: Sequence[Counts],
-                      weights: Weight=None) -> BLONDScore:
-        """Computes BLOND score from its sufficient statistics with smoothing.
-        :return: A `BLONDScore` instance.
+                      weights: Weight=None) -> BLONDEScore:
+        """Computes BLONDE score from its sufficient statistics with smoothing.
+        :return: A `BLONDEScore` instance.
         """
 
         # Fetch the default value for floor and add-k
         if weights is None:
-            weights = BLOND.WEIGHTS_DEFAULTS
+            weights = BLONDE.WEIGHTS_DEFAULTS
 
         max_order = None
         if 'n-gram' in weights.keys():
@@ -210,14 +220,14 @@ class BLOND(Metric):
                                                                   smooth_method=self.smooth_method,
                                                                   smooth_value=self.smooth_value)
         verbose = {'recalls': recalls, 'precisions': precisions, 'F1s': F1s}
-        return BLONDScore(recall, precision, F1, verbose)
+        return BLONDEScore(recall, precision, F1, verbose)
 
-    def _compute_score_from_stats(self, stats: Tuple[Sequence[Counts], Sequence[Counts]]) -> BLONDScore:
+    def _compute_score_from_stats(self, stats: Tuple[Sequence[Counts], Sequence[Counts]]) -> BLONDEScore:
         s_count = stats[0]
         max_r_count = stats[1]
-        return self.compute_blond(s_count, max_r_count)
+        return self.compute_blonde(s_count, max_r_count)
 
-    def _aggregate_and_compute(self, stats: Tuple[Sequence[Sequence[Counts]], Sequence[Sequence[Counts]]]) -> BLONDScore:
+    def _aggregate_and_compute(self, stats: Tuple[Sequence[Sequence[Counts]], Sequence[Sequence[Counts]]]) -> BLONDEScore:
         """Computes the final BLEU score given the pre-computed corpus statistics.
 
         :param stats: A list of segment-level statistics
@@ -225,7 +235,7 @@ class BLOND(Metric):
         """
         s_count = [item for doc_stats in stats[0] for item in doc_stats]
         max_r_count = [item for doc_stats in stats[1] for item in doc_stats]
-        return self.compute_blond(s_count, max_r_count)
+        return self.compute_blonde(s_count, max_r_count)
 
     def _extract_max_reference_sent(self, list_of_sent_r: Sequence[ProcessedSent]) -> Counts:
         """
@@ -300,7 +310,7 @@ class BLOND(Metric):
                 assert len(annotation) == len(processed_reference)
                 for i, (ref_doc, lines_an) in enumerate(zip(processed_reference, annotation)):
                     assert len(ref_doc) == len(lines_an), f"{i}-th doc: On no! len(ref_doc) != len(lines_an)"
-                    add_blond_plus_categories(ref_doc, lines_an)
+                    add_blonde_plus_categories(ref_doc, lines_an)
             if ner_refined is not None:
                 assert len(ner_refined) == len(processed_reference)
                 for i, (ref_doc, lines_ner) in enumerate(zip(processed_reference, ner_refined)):

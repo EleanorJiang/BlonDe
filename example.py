@@ -1,4 +1,4 @@
-from blond.BlonD import BLOND
+from blonde.BlonDe import BLOND
 from sacrebleu.metrics import BLEU
 
 

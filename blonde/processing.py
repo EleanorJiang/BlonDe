@@ -1,54 +1,9 @@
 import logging, spacy
+from . import CATEGORIES, VB_TYPE, PRONOUN_TYPE, PRONOUN_MAP, DM_TYPE, DM_MAP
 from .utils import ProcessedSent, ProcessedDoc, ProcessedCorpus
 from collections import Counter
 from typing import Sequence, Tuple, Dict
 
-VB_TYPE = ['VBD', 'VBN', 'VBP', 'VBZ', 'VBG', 'VB', 'MD']
-# VB_MAP = dict(zip(VB_TYPE, VB_TYPE))
-
-PRONOUN_TYPE = ["masculine", "feminine", "neuter", "epicene"]
-PRONOUN_MAP = {"masculine": ["he", "his", "him", "He", "His", "Him", "himself", "Himself"],
-               "feminine": ["she", "her", "hers", "She", "Her", "Hers", "herself", "Herself"],
-               "neuter": ["it", "its", "It", "Its", "itself", "Itself"],
-               "epicene": ["they", "their", "them", "They", "Their", "Them", "themselves", "Themselves"]
-               }
-PRONOUN_TYPE = list(PRONOUN_MAP.keys())
-
-"""
-DM_MAP is based on the PDTB hierarchy
-The top hierarchy are: 'comparison', 'contingency', 'expansion', 'temporal'
-    - Comparison: combine "concession" and "contrast"
-    - Contingency: only consider "cause"
-    - Expansion: only consider "conjunction"
-    - Temporal: "synchronous" and "asynchronous"
-"""
-DM_MAP = {
-    # Comparison:
-    "comparison": ["but", "while", "however", "although", "though", "still", "yet", "whereas",
-                   "on the other hand", "in contrast", "by contrast", "by comparison", "conversely"],
-    # Contingency:
-    "cause": ["if", "because", "so", "since", "thus", "hence", "as a result", "therefore", "thereby",
-              "accordingly", "consequently", "in consequence", "for this reason"], #"because of that", "because of this"
-    # "condition": ["if", "as long as" , "provided that", "assuming that", "given that"],
-    # Expansion:
-    "conjunction": ["also", "in addition", "moreover", "additionally", "besides", "else,", "plus"],
-    # "instantiation": ["for example", "for instance"],
-    # "alternative": ["instead", "or", "unless", "separately" ],
-    # "restatement": ["indeed", "in fact", "clearly", "in other words", "specifically"]
-    # Temporal:
-    "asynchronous": ["when", "after", "then", "before",
-                     "until", "later", "once", "afterward", "next"],
-    "synchronous": ["meantime", "meanwhile", "simultaneously"]
-}
-DM_TYPE = list(DM_MAP.keys())
-
-CATEGORIES = {
-    "tense": VB_TYPE,
-    "pronoun": PRONOUN_TYPE,
-    "entity": ["PERSON", "NON-PERSON"],
-    "dm": DM_TYPE,
-    "n-gram": [1, 2, 3, 4]
-}
 
 spacy.load('en_core_web_sm')
 nlp = spacy.load('en_core_web_sm')
@@ -189,7 +144,7 @@ def _flatten_list(doc_list: Sequence[Sequence[str]]) -> Tuple[Sequence[str], int
     return res, sent_num_per_doc
 
 
-def add_blond_plus_categories(doc: ProcessedDoc, lines_an):
+def add_blonde_plus_categories(doc: ProcessedDoc, lines_an):
     """
     Add the annotated BlonD+ categories to `Doc` object, which is a list of dicts described in `processed_doc`,
     i.g. list_of_dict[ {"str": "xxx", "ambiguity": ["xx", "xx", "xx"], "ellipsis": ["xx", "xx", "xx"]} ]

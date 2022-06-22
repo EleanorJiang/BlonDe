@@ -11,7 +11,7 @@ from util.logging_util import init_logging
 from util.csv_util import list2txt, txt2list
 from evaluation.dataset import load_corpus
 # For BlonD
-from blond.BlonD import BLOND
+from blonde.BlonDe import BLOND
 # For other metrics
 import sacrebleu
 from other_metrics.rc import lc_and_rc

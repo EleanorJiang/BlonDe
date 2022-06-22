@@ -1,4 +1,4 @@
-"""dBlonD score implementation."""
+"""dBlonDe score implementation."""
 from __future__ import division
 
 import logging
@@ -6,7 +6,7 @@ import math
 from collections import Counter, defaultdict
 from typing import Sequence, Tuple, Dict, Any
 from operator import itemgetter
-from .utils import Weight, Counts, compute_F1, safe_devide, union, intersect, diff, geo_average, arm_average
+from blonde.utils import Weight, Counts, compute_F1, safe_devide, union, intersect, diff, geo_average, arm_average
 from operator import itemgetter
 import numpy as np
 
@@ -16,7 +16,7 @@ def sim(sent_s_count: Counts, max_sent_r_count: Counts, weights: Weight, categor
     :param sent_s_count: the counts in hypothesis, corresponds to processed_sent['count'].
                     See the description in ``process_corpus``
     :param max_sent_r_count: the maximum count of references. Same as sent_s_count.
-    :param weights: Weight. See the description in BlonD.
+    :param weights: Weight. See the description in BlonDe.
     :return similarity: the similarity score, aka the total number of matched checkpofloats. float
     :return numerator: a dict[float], the numbers of matched checkpofloats per category.
     :return denominator_r: a dict[float], the numbers of reference checkpofloats per category.
@@ -69,7 +69,7 @@ def scoring(doc_s_count: Sequence[Counts], max_doc_r_count: Sequence[Counts], we
     :param doc_s_count: the counts in hypothesis document, a list of processed_sent['count'].
                     See the description in ``process_corpus``
     :param max_doc_r_count: the maximum count of references document. Same as doc_s_count.
-    :param weights: see the description in BlonD.
+    :param weights: see the description in BlonDe.
     :return recall/precision/F1: float.
     :return recalls/precisions/F1s: a dict, recall/precision/F1 per category.
     """
@@ -133,14 +133,14 @@ def scoring(doc_s_count: Sequence[Counts], max_doc_r_count: Sequence[Counts], we
 
     R, P, F1 = get_sum_results(list(recalls.values()), list(precisions.values()))
 
-    # For dBlonD
+    # For dBlonDe
     assert len(diff(recalls.keys(), precisions.keys())) == 0, "Oh no! recalls and precisions are having different keys!"
     keys = intersect(recalls.keys(), ["tense", "pronoun", "entity", "dm"])
-    recalls['dBlonD'], precisions['dBlonD'], F1s['dBlonD'] = get_sum_results(
+    recalls['dBlonDe'], precisions['dBlonDe'], F1s['dBlonDe'] = get_sum_results(
         itemgetter(*keys)(recalls), itemgetter(*keys)(precisions))
-    # For BlonD when BlonD_plus is computed
+    # For BlonDe when BlonDe_plus is computed
     keys = diff(recalls.keys(), ["ambiguity", "ellipsis"])
-    recalls['sBlonD'], precisions['sBlonD'], F1s['sBlonD'] = get_sum_results(
+    recalls['sBlonDe'], precisions['sBlonDe'], F1s['sBlonDe'] = get_sum_results(
         itemgetter(*keys)(recalls), itemgetter(*keys)(precisions))
 
     return R, P, F1, recalls, precisions, F1s
