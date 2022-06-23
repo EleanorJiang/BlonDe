@@ -97,7 +97,7 @@ def main():
                 refs.append([curr_ref])
         refs = list(zip(*refs))
     elif os.path.isfile(args.reference[0]):
-        assert os.path.exists(args.system), f"system file {args.cand} doesn't exist"
+        assert os.path.exists(args.system), f"system file {args.system} doesn't exist"
 
     categories = {}
     for category in args.categories:
