@@ -31,7 +31,7 @@ We hope that they will serve as a guide and inspiration for more work in the are
 - May 2022: Released the BlonDe package.
 - May 2022: Accepted to NAACL2022 🎉
 
-Please see [release logs](https://github.com/EleanorJiang/CHANGELOG.md) for older updates.
+Please see [release logs](https://github.com/EleanorJiang/BlonDe/blob/main/CHANGELOG.md) for older updates.
 
 **If you use the BlonDe package or the BWB dataset for your research, please cite:**
 ```bibtex
@@ -490,3 +490,8 @@ He looked back, he saw Shen Liangchuan, eyes shrink, licking his face and smilin
 ```
 ### Download
 Download the BWB dataset from [this Google Drive link](https://drive.google.com/drive/folders/12K1-DWmpEdqkaR_61aogdywsALDg4z1L?usp=sharing).
+
+### Terms of Use
+Please note that use of this dataset constitutes your binding acceptance of the Terms of Use. 
+
+You can find the full, legally binding document [here](https://github.com/EleanorJiang/BlonDe/blob/main/TERMS_OF_USE): Terms of Use.
