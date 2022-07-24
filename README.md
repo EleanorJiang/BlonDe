@@ -243,7 +243,7 @@ BLONDE(weights: Weight=WEIGHTS_DEFAULTS,
 |-----------|-------------|
 | categories | A dict where the keys are chosen from `('tense', 'pronoun', 'entity', 'n-gram')`, and the keys are the names of features in different categories, Dict[str, Sequence[str]]. If `None`, `('tense', 'pronoun', 'entity', 'n-gram')` are included.
 | weights | The weights of the aerformentioned features, Dict[str, Sequence[float]]. If `None`, uniform weights are adopted. 
-| plus_categories | The human annotated categories, e.g. `('ambiguity', 'ellipsis')` (default: None)
+| plus_categories | The human annotated categories, e.g. `('ambiguity', 'ellipsis')` (default: `None`)
 | plus_weights | The weights of the human annotated categories (default: `None`)
 | weight_normalize | Whether to reweight to 1 (default: `False`)
 | lowercase | If `True`, lowercased BLONDE is computed.
