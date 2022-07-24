@@ -36,12 +36,15 @@ Please see [release logs](https://github.com/EleanorJiang/BlonDe/blob/main/CHANG
 **If you use the BlonDe package or the BWB dataset for your research, please cite:**
 ```bibtex
 @article{jiang-etal-2022-blonde,
-      title={{BlonDe}: An Automatic Evaluation Metric for Document-level Machine Translation}, 
-      author={Yuchen Eleanor Jiang and Tianyu Liu and Shuming Ma and Dongdong Zhang and Jian Yang and Haoyang Huang and Rico Sennrich and Ryan Cotterell and Mrinmaya Sachan and Ming Zhou},
-      year={2022},
-      eprint={2103.11878},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+      title="{BlonDe}: An Automatic Evaluation Metric for Document-level Machine Translation", 
+      author="Yuchen Eleanor Jiang and Tianyu Liu and Shuming Ma and Dongdong Zhang and Jian Yang and Haoyang Huang and Rico Sennrich and Ryan Cotterell and Mrinmaya Sachan and Ming Zhou",
+      booktitle = "Proceedings of the 2022 Conference of the North American Chapter of the Association for Computational Linguistics: Human Language Technologies",
+      month = jul,
+      year = "2022",
+      address = "Seattle, United States",
+      publisher = "Association for Computational Linguistics",
+      url = "https://aclanthology.org/2022.naacl-main.111",
+      pages = "1550--1565",
 }
 ```
 
