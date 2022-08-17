@@ -118,8 +118,8 @@ yielding all sentences processed. The processed sentences are `BWBSentence` obje
 `BWBSentence` is a class representing the annotations available for a single formatted sentence.
 The parameters are:
 
-|  parameter    |  Description  |    
-|-----------|-------------|
+|  Parameter    | Description  |    
+|:-----------|:-------------|
 | ``document_id``     | `str`. This is a variation on the document filename.    |
 | ``sentence_id``     | `int`. The integer ID of the sentence within a document.    |
 | ``lang``     | `str`. The language of this sentence.    |
