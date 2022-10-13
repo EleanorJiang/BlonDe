@@ -44,6 +44,7 @@ Please see [release logs](https://github.com/EleanorJiang/BlonDe/blob/main/CHANG
       address = "Seattle, United States",
       publisher = "Association for Computational Linguistics",
       url = "https://aclanthology.org/2022.naacl-main.111",
+      doi = "10.18653/v1/2022.naacl-main.111",
       pages = "1550--1565",
 }
 ```
