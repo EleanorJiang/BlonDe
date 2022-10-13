@@ -10,7 +10,8 @@ Dataset = List[Corpus]  # A list of books
 
 SYS_ID = {"smt": 0, "ms": 1, "google": 2, "bd": 3, "sent": 4, "doc": 5, "cad": 6, "ctx": 7, "pe": 8}
 SYSTEMS = list(SYS_ID.keys())
-BOOKS = [0, 1, 153, 215, 216, 383]
+BOOKS = [0, 1, 153, 216, 270, 383]
+
 
 def load_corpus(data_dir: str, set: str='test') -> Tuple[Dict[str, Dataset], Dataset, Dataset, Dataset, Sequence[str]]:
     book_names = os.listdir(os.path.join(data_dir, set))  # ['book0', 'book1', 'book153', 'book216', 'book270', 'book383']
