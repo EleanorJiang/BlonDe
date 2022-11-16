@@ -12,7 +12,7 @@ import en_core_web_sm, zh_core_web_sm
 import sys
 import pickle
 from collections import Counter, defaultdict
-sys.path.append('..')
+sys.path.insert(0, '.')
 from util.align_bpe import align_bpe
 from util.sents2doc_mapping import align_sent2doc, map_span, merge_clusters, merge_quotes, get_attr
 # Counts = Dict[str, Union[Sequence[Counter], Counter]]

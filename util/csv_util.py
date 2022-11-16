@@ -14,3 +14,7 @@ def list2txt(lst, output_file):
 def csv_to_excel(source_file, des_file):
     read_file = pd.read_csv(source_file)
     read_file.to_excel(des_file, index=None, header=True)
+
+
+def flat_list(lst):
+    return [item for sublist in lst for item in sublist]
