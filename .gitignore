@@ -7,3 +7,6 @@
 /debug/
 /evaluation/output/
 /evaluation/output_bwb/
+/util/__pycache__/
+/BWB/__pycache__/
+/.DS_Store
