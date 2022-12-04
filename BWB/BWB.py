@@ -71,6 +71,7 @@ class BWBSentence:
     lang : `str`. The language of this sentence.
     line: `str`. The original annotation line.
     words : `List[str]`. This is the tokens as segmented/tokenized in BWB.
+    mentions : `List[Mention]`. The list of mentions in this sentence.
     pronouns: `List[str]`. The pronoun tag of each token, chosen from `P`, `O` or `-`.
     entities : `Dict[int, Tuple[str, str]]`. Entity id -> (Entity type, Terminology).
     clusters : `Dict[int, List[Span]]`.
