@@ -83,6 +83,8 @@ class BWBSentence:
             A dict of lexical forms, where the keys are entity ids, and the values are lists of words.
     quotes: List[Tuple[int, Span]]. The entity id of the speaker if it is a quote, or `None.
     pos_tags : `List[str]`. This is the Penn-Treebank-style part of speech. Default: `None.`
+    lemmas : `List[str]`. The lemma of each token. Default: `None.`
+    tokens : `List[str]`. The tokens as segmented/tokenized in the original data file.
     """
 
     def __init__(
@@ -529,3 +531,14 @@ class BWB:
         with codecs.open(cache_file, "wb") as f:
             pickle.dump((zh_list, en_list), f)
 
+
+if __name__ == '__main__':
+    bwb_reader = BWB()
+    # get current directory: getcwd() -> current working directory
+    dir_path = "/Users/eleanorjiang/iCloud/BLOND-MSRA/DATA/BWB_annotation_20220727"
+    print(dir_path)
+    cache_file = f"{dir_path}/sent.cache"
+    for sentences in bwb_reader.dataset_iterator_from_cache(cache_file, dir_path):
+        for sentence in sentences:
+            print(sentence.document_id, sentence.sentence_id, sentence.lang)
+    print("Done")

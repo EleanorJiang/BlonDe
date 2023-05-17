@@ -3,7 +3,7 @@ import codecs
 from collections import Counter, defaultdict
 import json
 import pandas as pd
-from BWB import BWB
+from BWB import BWBReader
 
 KEYS = ["tokens", "sents", "pronouns", "omitted_pronouns", "distinct_terms", "total_terms",
         "distinct_PER", "total_PER", "distinct_FAC", "total_FAC",  "distinct_GPE", "total_GPE",
@@ -79,7 +79,7 @@ def get_stat_test(cache_file, dir_path, chs_file, ref_file, chs_entity_json, ref
         stats: A dict of counters where the keys are `chapter_id`s, e.g. "Book153-3",
                and the values are a list of stat counters, of which each item corresponds to a sentence.
     """
-    bwb_reader = BWB()
+    bwb_reader = BWBReader()
     zh_stats, en_stats = [], []
     zh_entity_types, en_entity_types = {}, {}
     zh_entity_counts, en_entity_counts = [], []

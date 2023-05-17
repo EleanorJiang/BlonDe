@@ -1,7 +1,7 @@
 import re
 import pandas as pd
 import json
-from BWB.BWB import BWB
+from BWB.BWBReader import BWB
 from typing import List, Dict, Tuple
 """
 Get counts for entity spans for both chinese and reference.

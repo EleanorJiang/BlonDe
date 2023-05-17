@@ -27,9 +27,11 @@ We hope that they will serve as a guide and inspiration for more work in the are
   
 #### News:
 <!-- - Features to appear in the next version (currently in the master branch): -->
+- May 2023: BWB got accepted to ACL2023 🎉
+- Jan 2023: Released the annotated BWB-test dataset: Entity, terminology, coreference, quotation.
 - June 2022: Released the BWB dataset.
 - May 2022: Released the BlonDe package.
-- May 2022: Accepted to NAACL2022 🎉
+- May 2022: BlonDe got accepted at NAACL2022 🎉
 
 Please see [release logs](https://github.com/EleanorJiang/BlonDe/blob/main/CHANGELOG.md) for older updates.
 
@@ -45,6 +47,20 @@ Please see [release logs](https://github.com/EleanorJiang/BlonDe/blob/main/CHANG
       publisher = "Association for Computational Linguistics",
       url = "https://aclanthology.org/2022.naacl-main.111",
       doi = "10.18653/v1/2022.naacl-main.111",
+      pages = "1550--1565",
+}
+```
+```bibtex
+@inproceedings{jiang-etal-2023-discourse,
+      title="Discourse Centric Evaluation of Machine Translation with a Densely Annotated Parallel Corpus", 
+      author="Yuchen Eleanor Jiang and Tianyu Liu and Shuming Ma and Dongdong Zhang and Ryan Cotterell and Mrinmaya Sachan",
+      booktitle = "Proceedings of the 2023 Conference of the Association for Computational Linguistics: Human Language Technologies",
+      month = jul,
+      year = "2023",
+      address = "Toronto, Canada",
+      publisher = "Association for Computational Linguistics",
+      url = "https://aclanthology.org/2023.acl-main.111",
+      doi = "10.18653/v1/2023.main.111",
       pages = "1550--1565",
 }
 ```
