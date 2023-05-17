@@ -31,7 +31,7 @@ We hope that they will serve as a guide and inspiration for more work in the are
 - Jan 2023: Released the annotated BWB-test dataset: Entity, terminology, coreference, quotation.
 - June 2022: Released the BWB dataset.
 - May 2022: Released the BlonDe package.
-- May 2022: BlonDe got accepted at NAACL2022 🎉
+- May 2022: BlonDe got accepted to NAACL2022 🎉
 
 Please see [release logs](https://github.com/EleanorJiang/BlonDe/blob/main/CHANGELOG.md) for older updates.
 
