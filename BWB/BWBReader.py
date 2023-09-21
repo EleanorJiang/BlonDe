@@ -535,7 +535,7 @@ class BWB:
 if __name__ == '__main__':
     bwb_reader = BWB()
     # get current directory: getcwd() -> current working directory
-    dir_path = "/Users/eleanorjiang/iCloud/BLOND-MSRA/DATA/test_with_annotations"
+    dir_path = "/path/to/test_with_annotations"
     print(dir_path)
     cache_file = f"{dir_path}/sent.cache"
     for sentences in bwb_reader.dataset_iterator_from_cache(cache_file, dir_path):
