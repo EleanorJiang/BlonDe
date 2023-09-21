@@ -163,7 +163,7 @@ class BWB:
 
     def dataset_iterator_from_cache(self, cache_file: str = "", dir_path: str = "") -> Iterator[BWBSentence]:
         if not os.path.isfile(cache_file):
-            assert os.path.isdir(dir_path), "No cached file, please specify the original directory."
+            print( "Generating the cached file...")
             self.to_cache(dir_path, cache_file)
         with codecs.open(cache_file, "rb") as f:
             zh_list, en_list = pickle.load(f)
@@ -535,7 +535,7 @@ class BWB:
 if __name__ == '__main__':
     bwb_reader = BWB()
     # get current directory: getcwd() -> current working directory
-    dir_path = "/Users/eleanorjiang/iCloud/BLOND-MSRA/DATA/BWB_annotation_20220727"
+    dir_path = "/Users/eleanorjiang/iCloud/BLOND-MSRA/DATA/test_with_annotations"
     print(dir_path)
     cache_file = f"{dir_path}/sent.cache"
     for sentences in bwb_reader.dataset_iterator_from_cache(cache_file, dir_path):
